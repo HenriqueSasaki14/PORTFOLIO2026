@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio — Henrique Sasaki Tannoua</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+  <div class="bg-shape"></div>
+  <header class="topbar">
+    <div class="logo">HS</div>
+    <nav class="nav">
+      <a href="#sobre">Sobre</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#contato">Contato</a>
+      <a class="btn" href="mailto:email@exemplo.com">Fale comigo</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="badge">Técnico em Desenvolvimento de Sistemas integrado ao ensino médio</p>
+        <h1>Olá, sou <span>Henrique Sasaki Tannous</span>. Seja bem vindo ao meu portfolio.</h1>
+        <p class="lead">Focado em full-stack, automação e integração. Busco estágio para aplicar o que estudo em
+          projetos reais.</p>
+        <div class="actions">
+          <a class="btn primary" href="#projetos">Ver projetos</a>
+          <a class="btn ghost" href="#contato">Disponibilidade</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="avatar">
+          <img src="./assets/foto-henrique.jpg" alt="Foto de Henrique Sasaki" />
+
+    </section>
+
+    <section id="sobre" class="section two-col">
+      <div>
+        <p class="eyebrow">Sobre</p>
+        <h2>Quem sou eu</h2>
+        <p>Me chamo Henrique Sasaki, tenho 17 anos, e sou estudante do curso Técnico em Desenvolvimento de Sistemas
+          integrado ao Ensino Médio, na instituição SESI SENAI. Também sou atleta de alto rendimento, como velejador de
+          Santa Catarina, participando em campeonatos nacionais e internacionais, ao todo foram 4 Brasileiros, 2
+          mundiais, 2 Sulamericanos, 1 Norte-Americano e 1 the R.O.C, que reúne os 45 melhores velejadores do ano. </p>
+      </div>
+      <div class="card">
+        <h3>Linguagens</h3>
+        <ul class="tags">
+          <li>HTML5<img src="Images/Html.png" alt=""></li>
+          <li>CSS3 <img src="Images/Css.png" alt=""></li>
+          <li>JavaScript <img src="Images/Js.png" alt=""></li>
+          <li>Flutter <img src="Images/Flutter.png" alt=""></li>
+          <li>Git <img src="Images/Git.png" alt=""></li>
+          <li>Python básico <img src="Images/python.png" alt=""></li>
+          <li>C# intermediário<img src="Images/Csharp_Logo.png" alt=""></li>
+        </ul>
+        <h3>Cursos/Certificações/Competências</h3>
+        <ul class="list">
+          <li>Curso Técnico em Desenvolvimento de Sistemas</li>
+          <li>Word e Excel básicos</li>
+          <li>Canva avançado</li>
+          <li>Maior nota possível no Cambridge Test em 2023 - B1</li>
+          <li>Inglês avançado/fluente</li>
+          <li>Espanhol básico</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projetos" class="section">
+      <p class="eyebrow">Projetos 2026</p>
+      <div class="grid">
+        <article class="project">
+          <div class="pill">Web</div>
+          <h3>Landing Page Escola</h3>
+          <p>Site responsivo para evento escolar, com foco em clareza e inscrição rápida.</p>
+          <div class="links">
+            <a href="#" aria-label="Ver projeto">Ver projeto</a>
+            <a href="#" aria-label="Ver código">Código</a>
+          </div>
+        </article>
+        <article class="project">
+          <div class="pill">Automação</div>
+          <h3>Bot de Estudos</h3>
+          <p>Script que organiza cronogramas de estudo e envia lembretes diários.</p>
+          <div class="links">
+            <a href="#">Ver projeto</a>
+            <a href="#">Código</a>
+          </div>
+        </article>
+        <article class="project">
+          <div class="pill">App</div>
+          <h3>Checklist de Tarefas</h3>
+          <p>To-do simples com filtro de prioridade e armazenamento local.</p>
+          <div class="links">
+            <a href="#">Ver projeto</a>
+            <a href="#">Código</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contato" class="section contact">
+      <div>
+        <p class="eyebrow">Contato</p>
+        <h2>Vamos conversar</h2>
+        <p>Aberto para estágio, freelas e colaboração em projetos escolares.</p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:henrique.sasaki14@gmail.com">Email</a>
+          <a class="btn ghost" href="https://www.linkedin.com" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </div>
+      <form class="card form">
+        <label>Nome<input type="text" name="nome" placeholder="Seu nome" required></label>
+        <label>Email<input type="email" name="email" placeholder="seu@gmail.com" required></label>
+        <label>Mensagem<textarea name="mensagem" rows="4" placeholder="Como posso ajudar?" required></textarea></label>
+        <button type="submit" class="btn primary full">Enviar</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Feito por Henrique Sasaki Tannous — 2026</p>
+  </footer>
+</body>
+
+</html>
