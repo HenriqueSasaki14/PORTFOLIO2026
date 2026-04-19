@@ -8,4 +8,4 @@ Nomes esperados pelo JavaScript:
 - `lofi-2.mp3`
 - `lofi-3.mp3`
 
-Se quiser trocar nomes, edite a lista `tracks` em `index/js/music-player.js`.
+As músicas não estão sendo usadas pelo site atual, que agora está somente em HTML e CSS.
