@@ -135,6 +135,17 @@
   function setupPersistentNavigation() {
     const stylesheet = document.querySelector('link[rel="stylesheet"][href*="../css/"]');
     const pageCache = new Map();
+    const knownPages = [
+      'index.html',
+      'escola.html',
+      'ensino-medio.html',
+      'tecnico-desenvolvimento.html',
+      'ensino-medio-1-humanas.html',
+      'ensino-medio-1-matematica.html',
+      'ensino-medio-1-natureza.html',
+      'ensino-medio-1-linguagens.html'
+    ];
+    let isLoadingPage = false;
 
     function isInternalPageLink(link) {
       if (!link || link.target || link.hasAttribute('download')) {
@@ -152,34 +163,75 @@
       const isSameOrigin = url.origin === window.location.origin ||
         (url.protocol === 'file:' && window.location.protocol === 'file:');
 
-      return isSameOrigin && url.pathname.endsWith('.html') && !isSamePageHash;
+      return isSameOrigin && (url.pathname === '/' || url.pathname.endsWith('.html')) && !isSamePageHash;
     }
 
     function getPageKey(url) {
       const pageUrl = new URL(url.href);
       pageUrl.hash = '';
-      return pageUrl.href;
+      return pageUrl.pathname === '/' ? '/index.html' : pageUrl.pathname;
     }
 
-    async function getPageHtml(url) {
-      const key = getPageKey(url);
+    function getPageName(url) {
+      const pathname = url.pathname === '/' ? '/index.html' : url.pathname;
+      return pathname.split('/').pop() || 'index.html';
+    }
 
+    function getFetchUrl(url) {
+      if (window.location.protocol === 'file:') {
+        return url.href;
+      }
+
+      return `${window.location.origin}/html/${getPageName(url)}`;
+    }
+
+    function readCachedPage(key) {
       if (pageCache.has(key)) {
         return pageCache.get(key);
       }
 
-      const response = await fetch(key, { cache: 'force-cache' });
+      try {
+        return sessionStorage.getItem(`portfolio-page:${key}`);
+      } catch {
+        return null;
+      }
+    }
+
+    function writeCachedPage(key, html) {
+      pageCache.set(key, html);
+
+      try {
+        sessionStorage.setItem(`portfolio-page:${key}`, html);
+      } catch {
+        // Session storage can be unavailable or full; memory cache still helps.
+      }
+    }
+
+    async function getPageHtml(url) {
+      const key = getPageKey(url);
+      const cachedPage = readCachedPage(key);
+
+      if (cachedPage) {
+        pageCache.set(key, cachedPage);
+        return cachedPage;
+      }
+
+      const response = await fetch(getFetchUrl(url), { cache: 'force-cache' });
 
       if (!response.ok) {
         throw new Error(`Unable to load page: ${key}`);
       }
 
       const html = await response.text();
-      pageCache.set(key, html);
+      writeCachedPage(key, html);
       return html;
     }
 
     function preloadInternalPages() {
+      knownPages.forEach((page) => {
+        getPageHtml(new URL(page, window.location.href)).catch(() => {});
+      });
+
       document.querySelectorAll('a').forEach((link) => {
         if (!isInternalPageLink(link)) {
           return;
@@ -217,43 +269,52 @@
     }
 
     async function loadPage(url, addToHistory = true) {
-      const html = await getPageHtml(url);
-      const nextDocument = new DOMParser().parseFromString(html, 'text/html');
-      const nextMain = nextDocument.querySelector('main');
-      const currentMain = document.querySelector('main');
-      const nextFooter = nextDocument.querySelector('.footer');
-      const currentFooter = document.querySelector('.footer');
-      const nextNav = nextDocument.querySelector('.nav');
-      const currentNav = document.querySelector('.nav');
-      const nextStylesheet = nextDocument.querySelector('link[rel="stylesheet"][href*="../css/"]');
-
-      if (!nextMain || !currentMain) {
-        throw new Error(`Invalid page: ${url.href}`);
+      if (isLoadingPage) {
+        return;
       }
 
-      document.title = nextDocument.title;
-      currentMain.replaceWith(nextMain);
+      isLoadingPage = true;
+      try {
+        const html = await getPageHtml(url);
+        const nextDocument = new DOMParser().parseFromString(html, 'text/html');
+        const nextMain = nextDocument.querySelector('main');
+        const currentMain = document.querySelector('main');
+        const nextFooter = nextDocument.querySelector('.footer');
+        const currentFooter = document.querySelector('.footer');
+        const nextNav = nextDocument.querySelector('.nav');
+        const currentNav = document.querySelector('.nav');
+        const nextStylesheet = nextDocument.querySelector('link[rel="stylesheet"][href*="../css/"]');
 
-      if (nextFooter && currentFooter) {
-        currentFooter.replaceWith(nextFooter);
+        if (!nextMain || !currentMain) {
+          throw new Error(`Invalid page: ${url.href}`);
+        }
+
+        document.title = nextDocument.title;
+        currentMain.replaceWith(nextMain);
+
+        if (nextFooter && currentFooter) {
+          currentFooter.replaceWith(nextFooter);
+        }
+
+        if (nextNav && currentNav) {
+          currentNav.innerHTML = nextNav.innerHTML;
+        }
+
+        if (stylesheet && nextStylesheet) {
+          stylesheet.setAttribute('href', nextStylesheet.getAttribute('href'));
+        }
+
+        syncBackgroundShape(nextDocument);
+        preloadInternalPages();
+
+        if (addToHistory) {
+          history.pushState({}, '', url.href);
+        }
+
+        scrollToPageTarget(url.hash);
+      } finally {
+        isLoadingPage = false;
       }
-
-      if (nextNav && currentNav) {
-        currentNav.innerHTML = nextNav.innerHTML;
-      }
-
-      if (stylesheet && nextStylesheet) {
-        stylesheet.setAttribute('href', nextStylesheet.getAttribute('href'));
-      }
-
-      syncBackgroundShape(nextDocument);
-      preloadInternalPages();
-
-      if (addToHistory) {
-        history.pushState({}, '', url.href);
-      }
-
-      scrollToPageTarget(url.hash);
     }
 
     document.addEventListener('click', (event) => {
@@ -265,17 +326,17 @@
 
       event.preventDefault();
       loadPage(new URL(link.href, window.location.href)).catch(() => {
-        window.location.href = link.href;
+        isLoadingPage = false;
       });
     });
 
     window.addEventListener('popstate', () => {
       loadPage(new URL(window.location.href), false).catch(() => {
-        window.location.reload();
+        isLoadingPage = false;
       });
     });
 
-    pageCache.set(getPageKey(new URL(window.location.href)), document.documentElement.outerHTML);
+    writeCachedPage(getPageKey(new URL(window.location.href)), document.documentElement.outerHTML);
     preloadInternalPages();
   }
 
