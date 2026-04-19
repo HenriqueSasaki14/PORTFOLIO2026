@@ -12,6 +12,7 @@
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/index.css" />
+  <link rel="stylesheet" href="../css/player.css" />
 </head>
 
 <body>
@@ -19,6 +20,29 @@
     <div class="brand">
       <div class="logo">HS</div>
     </div>
+
+    <!-- LoFi Music Player -->
+    <div class="lp" id="lofi-player">
+      <div class="lp-controls">
+        <button class="lp-btn" id="lp-prev" aria-label="Faixa anterior">⏮</button>
+        <button class="lp-btn" id="lp-playpause" aria-label="Play">▶</button>
+        <button class="lp-btn" id="lp-next" aria-label="Próxima faixa">⏭</button>
+      </div>
+      <div class="lp-info">
+        <span class="lp-title" id="lp-title">Carregando...</span>
+        <span class="lp-artist" id="lp-artist"></span>
+        <div class="lp-progress-row">
+          <span class="lp-time" id="lp-current">0:00</span>
+          <div class="lp-progress" id="lp-progress"><div class="lp-bar" id="lp-bar"></div></div>
+          <span class="lp-time" id="lp-duration">0:00</span>
+        </div>
+      </div>
+      <div class="lp-volume-wrap">
+        <span class="lp-vol-icon">🔊</span>
+        <input type="range" id="lp-volume" min="0" max="100" value="50" aria-label="Volume">
+      </div>
+    </div>
+
     <nav class="nav">
       <a href="#sobre">Sobre</a>
       <a href="#projetos">Projetos</a>
@@ -128,6 +152,8 @@
   <footer class="footer">
     <p>Feito por Henrique Sasaki Tannous — 2026</p>
   </footer>
+  <script src="../js/router.js"></script>
+  <script src="../js/player.js"></script>
 </body>
 
 </html>
