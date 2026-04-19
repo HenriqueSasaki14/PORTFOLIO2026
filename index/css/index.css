@@ -1100,30 +1100,6 @@ textarea {
   background: rgba(255, 255, 255, 0.92);
 }
 
-/* SPA frame shell */
-.frame-shell {
-  display: block !important;
-  width: 100% !important;
-  max-width: none !important;
-  min-height: calc(100vh - 112px) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.page-frame {
-  display: block !important;
-  width: 100% !important;
-  min-width: 100% !important;
-  height: calc(100vh - 112px) !important;
-  min-height: 760px !important;
-  border: 0 !important;
-  background: transparent !important;
-}
-
-main.frame-shell + .footer {
-  display: none;
-}
-
 .brand .music-current,
 .brand .music-duration {
   display: inline-block;

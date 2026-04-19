@@ -1,4 +1,4 @@
-const knownPages = [
+﻿const knownPages = [
   'index.html',
   'escola.html',
   'ensino-medio.html',
@@ -10,7 +10,7 @@ const knownPages = [
 ];
 
 const pageTitles = {
-  'index.html': 'Portfólio — Henrique Sasaki Tannous',
+  'index.html': 'Portfolio - Henrique Sasaki Tannous',
   'escola.html': 'Projetos da Escola - Henrique Sasaki Tannous',
   'ensino-medio.html': 'Ensino Medio - Henrique Sasaki Tannous',
   'tecnico-desenvolvimento.html': 'Tecnico em Desenvolvimento de Sistemas - Henrique Sasaki Tannous',
@@ -46,9 +46,7 @@ function getPublicUrl(url) {
   return `/${pageName}${url.hash || ''}`;
 }
 
-function getFrameUrl(url) {
-  const pageName = getPageName(url);
-
+function getSourceUrl(pageName) {
   if (window.location.protocol === 'file:') {
     return `html/${pageName}`;
   }
@@ -60,55 +58,10 @@ function getStylesheetUrl(pageName) {
   const cssFile = pageStylesheets[pageName] || pageStylesheets['index.html'];
 
   if (window.location.protocol === 'file:') {
-    return `../css/${cssFile}`;
+    return `css/${cssFile}`;
   }
 
   return `/css/${cssFile}`;
-}
-
-async function getPageMainMarkup(url) {
-  const response = await fetch(getFrameUrl(url), { cache: 'force-cache' });
-
-  if (!response.ok) {
-    throw new Error(`Nao foi possivel carregar ${getFrameUrl(url)}`);
-  }
-
-  const html = await response.text();
-  const pageDocument = new DOMParser().parseFromString(html, 'text/html');
-  const main = pageDocument.querySelector('main');
-
-  if (!main) {
-    throw new Error(`Pagina sem main: ${getFrameUrl(url)}`);
-  }
-
-  return main.outerHTML;
-}
-
-function buildFrameDocument(url, mainMarkup) {
-  const pageName = getPageName(url);
-  const baseHref = window.location.protocol === 'file:'
-    ? new URL('html/', window.location.href).href
-    : `${window.location.origin}/html/`;
-
-  return `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="${baseHref}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="${getStylesheetUrl(pageName)}">
-  <style>
-    body { background: transparent !important; min-height: auto !important; }
-    main { padding-top: 24px !important; }
-  </style>
-</head>
-<body>
-  ${mainMarkup}
-</body>
-</html>`;
 }
 
 function isPortfolioPageLink(link) {
@@ -129,6 +82,24 @@ function isPortfolioPageLink(link) {
   return isSameOrigin && knownPages.includes(getPageName(url));
 }
 
+function normalizeAssetPaths(root) {
+  root.querySelectorAll('[src]').forEach((element) => {
+    const src = element.getAttribute('src');
+
+    if (src && src.startsWith('../')) {
+      element.setAttribute('src', src.replace(/^\.\.\//, ''));
+    }
+  });
+
+  root.querySelectorAll('[href]').forEach((element) => {
+    const href = element.getAttribute('href');
+
+    if (href && href.startsWith('../')) {
+      element.setAttribute('href', href.replace(/^\.\.\//, ''));
+    }
+  });
+}
+
 function scrollToHash(hash) {
   if (!hash) {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -142,103 +113,53 @@ function scrollToHash(hash) {
   }
 }
 
-export function initFrameRouter() {
-  const appMain = document.querySelector('main');
+async function getMainFromPage(pageName) {
+  const response = await fetch(getSourceUrl(pageName), { cache: 'force-cache' });
 
-  if (!appMain) {
+  if (!response.ok) {
+    throw new Error(`Nao foi possivel carregar ${getSourceUrl(pageName)}`);
+  }
+
+  const html = await response.text();
+  const pageDocument = new DOMParser().parseFromString(html, 'text/html');
+  const main = pageDocument.querySelector('main');
+
+  if (!main) {
+    throw new Error(`Pagina sem main: ${getSourceUrl(pageName)}`);
+  }
+
+  normalizeAssetPaths(main);
+  return main;
+}
+
+export function initFrameRouter() {
+  let appMain = document.querySelector('main');
+  const stylesheet = document.querySelector('link[rel="stylesheet"][href*="css/"]');
+
+  if (!appMain || !stylesheet) {
     return;
   }
 
-  const homeMainMarkup = appMain.innerHTML;
-  const homeMainClass = appMain.className;
-  let pageFrame = null;
-
-  function showHomePage(url, addToHistory = true) {
-    appMain.removeAttribute('style');
-    appMain.className = homeMainClass;
-    appMain.innerHTML = homeMainMarkup;
-    document.title = pageTitles['index.html'];
-
-    if (addToHistory) {
-      history.pushState({ portfolioPage: true }, '', getPublicUrl(new URL('index.html', window.location.href)));
-    }
-
-    scrollToHash(url.hash);
-  }
-
-  function attachFrameNavigation() {
-    if (!pageFrame || !pageFrame.contentDocument) {
-      return;
-    }
-
-    const frameDocument = pageFrame.contentDocument;
-
-    frameDocument.querySelectorAll('a[href]').forEach((link) => {
-      if (isPortfolioPageLink(link)) {
-        link.removeAttribute('target');
-        link.removeAttribute('rel');
-        return;
-      }
-
-      link.setAttribute('target', '_top');
-      link.setAttribute('rel', 'noreferrer');
-    });
-
-    frameDocument.addEventListener('click', (event) => {
-      const link = event.target.closest('a');
-
-      if (!link || !isPortfolioPageLink(link)) {
-        return;
-      }
-
-      event.preventDefault();
-      showPage(new URL(link.href, window.location.href), true).catch((error) => {
-        console.error('Erro ao navegar no portfolio:', error);
-      });
-    });
-  }
+  const homeMain = appMain.cloneNode(true);
+  normalizeAssetPaths(homeMain);
 
   async function showPage(url, addToHistory = true) {
     const pageName = getPageName(url);
+    const nextMain = pageName === 'index.html'
+      ? homeMain.cloneNode(true)
+      : await getMainFromPage(pageName);
 
-    if (pageName === 'index.html') {
-      showHomePage(url, addToHistory);
-      return;
-    }
-
-    if (!pageFrame) {
-      pageFrame = document.createElement('iframe');
-      pageFrame.className = 'page-frame';
-      pageFrame.title = 'Conteúdo do portfólio';
-      pageFrame.setAttribute('width', '100%');
-      pageFrame.setAttribute('height', '100%');
-      Object.assign(pageFrame.style, {
-        display: 'block',
-        width: '100%',
-        minWidth: '100%',
-        height: 'calc(100vh - 112px)',
-        minHeight: '760px',
-        border: '0',
-        background: 'transparent'
-      });
-      pageFrame.addEventListener('load', attachFrameNavigation);
-    }
-
-    appMain.className = 'frame-shell';
-    Object.assign(appMain.style, {
-      width: '100%',
-      maxWidth: 'none',
-      margin: '0',
-      padding: '0'
-    });
-    appMain.replaceChildren(pageFrame);
-    const mainMarkup = await getPageMainMarkup(url);
-    pageFrame.srcdoc = buildFrameDocument(url, mainMarkup);
+    normalizeAssetPaths(nextMain);
+    appMain.replaceWith(nextMain);
+    appMain = nextMain;
     document.title = pageTitles[pageName] || pageTitles['index.html'];
+    stylesheet.setAttribute('href', getStylesheetUrl(pageName));
 
     if (addToHistory) {
       history.pushState({ portfolioPage: true }, '', getPublicUrl(url));
     }
+
+    scrollToHash(url.hash);
   }
 
   document.addEventListener('click', (event) => {
@@ -250,9 +171,7 @@ export function initFrameRouter() {
 
     const href = link.getAttribute('href');
 
-    if (href && href.startsWith('#') && !document.querySelector(href)) {
-      event.preventDefault();
-      showHomePage(new URL(`index.html${href}`, window.location.href), true);
+    if (href && href.startsWith('#')) {
       return;
     }
 
