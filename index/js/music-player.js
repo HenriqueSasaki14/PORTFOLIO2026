@@ -326,7 +326,7 @@
         }
 
         if (!isInternalPageLink(link)) {
-          link.setAttribute('target', '_blank');
+          link.setAttribute('target', '_top');
           link.setAttribute('rel', 'noreferrer');
         }
       });
@@ -343,7 +343,7 @@
 
           if (href && !href.startsWith('#')) {
             event.preventDefault();
-            window.open(link.href, '_blank', 'noreferrer');
+            window.top.location.href = link.href;
           }
 
           return;
