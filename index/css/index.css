@@ -246,10 +246,14 @@ main {
 
 .hero {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+  gap: 32px;
+  align-items: stretch;
   padding: 40px 0;
+}
+
+.hero-text {
+  align-self: center;
 }
 
 .hero-text h1 {
@@ -280,13 +284,12 @@ main {
 
 .hero-card {
   display: grid;
-  align-content: center;
-  justify-items: center;
+  align-self: stretch;
 }
 
 .hero-card .avatar {
-  width: min(420px, 100%);
-  aspect-ratio: 4 / 5;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -571,6 +574,11 @@ textarea {
 
   .hero {
     padding-top: 24px;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card .avatar {
+    height: 360px;
   }
 
   .category-title {
