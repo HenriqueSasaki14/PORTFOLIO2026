@@ -145,6 +145,16 @@
       'ensino-medio-1-natureza.html',
       'ensino-medio-1-linguagens.html'
     ];
+    const pageStylesheets = new Map([
+      ['index.html', 'index.css'],
+      ['escola.html', 'escola.css'],
+      ['ensino-medio.html', 'ensino-medio.css'],
+      ['tecnico-desenvolvimento.html', 'tecnico-desenvolvimento.css'],
+      ['ensino-medio-1-humanas.html', 'ensino-medio-1-humanas.css'],
+      ['ensino-medio-1-matematica.html', 'ensino-medio-1-matematica.css'],
+      ['ensino-medio-1-natureza.html', 'ensino-medio-1-natureza.css'],
+      ['ensino-medio-1-linguagens.html', 'ensino-medio-1-linguagens.css']
+    ]);
     let isLoadingPage = false;
 
     function isInternalPageLink(link) {
@@ -183,6 +193,47 @@
       }
 
       return `${window.location.origin}/html/${getPageName(url)}`;
+    }
+
+    function getPublicUrl(url) {
+      const pageName = getPageName(url);
+      const hash = url.hash || '';
+
+      if (pageName === 'index.html') {
+        return `/${hash}`;
+      }
+
+      return `/${pageName}${hash}`;
+    }
+
+    function getStylesheetUrl(pageName) {
+      const cssFile = pageStylesheets.get(pageName);
+
+      if (!cssFile) {
+        return '';
+      }
+
+      if (window.location.protocol === 'file:') {
+        return `../css/${cssFile}`;
+      }
+
+      return `/css/${cssFile}`;
+    }
+
+    function addResourceHint(href, rel, as) {
+      if (!href || document.querySelector(`link[rel="${rel}"][href="${href}"]`)) {
+        return;
+      }
+
+      const link = document.createElement('link');
+      link.rel = rel;
+      link.href = href;
+
+      if (as) {
+        link.as = as;
+      }
+
+      document.head.appendChild(link);
     }
 
     function readCachedPage(key) {
@@ -229,7 +280,11 @@
 
     function preloadInternalPages() {
       knownPages.forEach((page) => {
-        getPageHtml(new URL(page, window.location.href)).catch(() => {});
+        const url = new URL(page, window.location.href);
+
+        addResourceHint(getFetchUrl(url), 'prefetch');
+        addResourceHint(getStylesheetUrl(page), 'preload', 'style');
+        getPageHtml(url).catch(() => {});
       });
 
       document.querySelectorAll('a').forEach((link) => {
@@ -300,15 +355,21 @@
           currentNav.innerHTML = nextNav.innerHTML;
         }
 
-        if (stylesheet && nextStylesheet) {
-          stylesheet.setAttribute('href', nextStylesheet.getAttribute('href'));
+        if (stylesheet) {
+          const nextStylesheetUrl = getStylesheetUrl(getPageName(url));
+
+          if (nextStylesheetUrl) {
+            stylesheet.setAttribute('href', nextStylesheetUrl);
+          } else if (nextStylesheet) {
+            stylesheet.setAttribute('href', nextStylesheet.getAttribute('href'));
+          }
         }
 
         syncBackgroundShape(nextDocument);
         preloadInternalPages();
 
         if (addToHistory) {
-          history.pushState({}, '', url.href);
+          history.pushState({ portfolioPage: true }, '', getPublicUrl(url));
         }
 
         scrollToPageTarget(url.hash);
@@ -336,7 +397,24 @@
       });
     });
 
+    if ('navigation' in window && typeof window.navigation.addEventListener === 'function') {
+      window.navigation.addEventListener('navigate', (event) => {
+        const url = new URL(event.destination.url);
+        const isSameOrigin = url.origin === window.location.origin;
+        const isHtmlRoute = url.pathname === '/' || url.pathname.endsWith('.html');
+
+        if (!event.canIntercept || !isSameOrigin || !isHtmlRoute) {
+          return;
+        }
+
+        event.intercept({
+          handler: () => loadPage(url, false)
+        });
+      });
+    }
+
     writeCachedPage(getPageKey(new URL(window.location.href)), document.documentElement.outerHTML);
+    history.replaceState({ portfolioPage: true }, '', window.location.href);
     preloadInternalPages();
   }
 
