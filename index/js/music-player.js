@@ -182,7 +182,7 @@
     let isLoadingPage = false;
 
     function isInternalPageLink(link) {
-      if (!link || link.target || link.hasAttribute('download')) {
+      if (!link || link.hasAttribute('download')) {
         return false;
       }
 
@@ -198,6 +198,15 @@
         (url.protocol === 'file:' && window.location.protocol === 'file:');
 
       return isSameOrigin && (url.pathname === '/' || url.pathname.endsWith('.html')) && !isSamePageHash;
+    }
+
+    function isPortfolioPageLink(link) {
+      if (!isInternalPageLink(link)) {
+        return false;
+      }
+
+      const pageName = getPageName(new URL(link.href, window.location.href));
+      return knownPages.includes(pageName);
     }
 
     function getPageKey(url) {
@@ -310,6 +319,12 @@
       const frameDocument = pageFrame.contentDocument;
 
       frameDocument.querySelectorAll('a[href]').forEach((link) => {
+        if (isPortfolioPageLink(link)) {
+          link.removeAttribute('target');
+          link.removeAttribute('rel');
+          return;
+        }
+
         if (!isInternalPageLink(link)) {
           link.setAttribute('target', '_blank');
           link.setAttribute('rel', 'noreferrer');
@@ -323,7 +338,7 @@
           return;
         }
 
-        if (!isInternalPageLink(link)) {
+        if (!isPortfolioPageLink(link)) {
           const href = link.getAttribute('href');
 
           if (href && !href.startsWith('#')) {
