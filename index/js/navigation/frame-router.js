@@ -20,6 +20,17 @@ const pageTitles = {
   'ensino-medio-1-linguagens.html': 'Linguagens - 1 Trimestre - Henrique Sasaki Tannous'
 };
 
+const pageStylesheets = {
+  'index.html': 'index.css',
+  'escola.html': 'escola.css',
+  'ensino-medio.html': 'ensino-medio.css',
+  'tecnico-desenvolvimento.html': 'tecnico-desenvolvimento.css',
+  'ensino-medio-1-humanas.html': 'ensino-medio-1-humanas.css',
+  'ensino-medio-1-matematica.html': 'ensino-medio-1-matematica.css',
+  'ensino-medio-1-natureza.html': 'ensino-medio-1-natureza.css',
+  'ensino-medio-1-linguagens.html': 'ensino-medio-1-linguagens.css'
+};
+
 function getPageName(url) {
   const pathname = url.pathname === '/' ? '/index.html' : url.pathname;
   return pathname.split('/').pop() || 'index.html';
@@ -43,6 +54,61 @@ function getFrameUrl(url) {
   }
 
   return `/html/${pageName}`;
+}
+
+function getStylesheetUrl(pageName) {
+  const cssFile = pageStylesheets[pageName] || pageStylesheets['index.html'];
+
+  if (window.location.protocol === 'file:') {
+    return `../css/${cssFile}`;
+  }
+
+  return `/css/${cssFile}`;
+}
+
+async function getPageMainMarkup(url) {
+  const response = await fetch(getFrameUrl(url), { cache: 'force-cache' });
+
+  if (!response.ok) {
+    throw new Error(`Nao foi possivel carregar ${getFrameUrl(url)}`);
+  }
+
+  const html = await response.text();
+  const pageDocument = new DOMParser().parseFromString(html, 'text/html');
+  const main = pageDocument.querySelector('main');
+
+  if (!main) {
+    throw new Error(`Pagina sem main: ${getFrameUrl(url)}`);
+  }
+
+  return main.outerHTML;
+}
+
+function buildFrameDocument(url, mainMarkup) {
+  const pageName = getPageName(url);
+  const baseHref = window.location.protocol === 'file:'
+    ? new URL('html/', window.location.href).href
+    : `${window.location.origin}/html/`;
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="${baseHref}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="${getStylesheetUrl(pageName)}">
+  <style>
+    body { background: transparent !important; min-height: auto !important; }
+    main { padding-top: 24px !important; }
+  </style>
+</head>
+<body>
+  ${mainMarkup}
+</body>
+</html>`;
 }
 
 function isPortfolioPageLink(link) {
@@ -126,11 +192,13 @@ export function initFrameRouter() {
       }
 
       event.preventDefault();
-      showPage(new URL(link.href, window.location.href), true);
+      showPage(new URL(link.href, window.location.href), true).catch((error) => {
+        console.error('Erro ao navegar no portfolio:', error);
+      });
     });
   }
 
-  function showPage(url, addToHistory = true) {
+  async function showPage(url, addToHistory = true) {
     const pageName = getPageName(url);
 
     if (pageName === 'index.html') {
@@ -164,7 +232,8 @@ export function initFrameRouter() {
       padding: '0'
     });
     appMain.replaceChildren(pageFrame);
-    pageFrame.src = getFrameUrl(url);
+    const mainMarkup = await getPageMainMarkup(url);
+    pageFrame.srcdoc = buildFrameDocument(url, mainMarkup);
     document.title = pageTitles[pageName] || pageTitles['index.html'];
 
     if (addToHistory) {
@@ -192,11 +261,15 @@ export function initFrameRouter() {
     }
 
     event.preventDefault();
-    showPage(new URL(link.href, window.location.href), true);
+    showPage(new URL(link.href, window.location.href), true).catch((error) => {
+      console.error('Erro ao navegar no portfolio:', error);
+    });
   });
 
   window.addEventListener('popstate', () => {
-    showPage(new URL(window.location.href), false);
+    showPage(new URL(window.location.href), false).catch((error) => {
+      console.error('Erro ao voltar no portfolio:', error);
+    });
   });
 
   history.replaceState({ portfolioPage: true }, '', window.location.href);
@@ -204,6 +277,8 @@ export function initFrameRouter() {
   const initialUrl = new URL(window.location.href);
 
   if (getPageName(initialUrl) !== 'index.html') {
-    showPage(initialUrl, false);
+    showPage(initialUrl, false).catch((error) => {
+      console.error('Erro ao abrir rota inicial do portfolio:', error);
+    });
   }
 }
