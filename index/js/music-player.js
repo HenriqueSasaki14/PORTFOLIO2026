@@ -134,6 +134,7 @@
 
   function setupPersistentNavigation() {
     const stylesheet = document.querySelector('link[rel="stylesheet"][href*="../css/"]');
+    const pageCache = new Map();
 
     function isInternalPageLink(link) {
       if (!link || link.target || link.hasAttribute('download')) {
@@ -152,6 +153,40 @@
         (url.protocol === 'file:' && window.location.protocol === 'file:');
 
       return isSameOrigin && url.pathname.endsWith('.html') && !isSamePageHash;
+    }
+
+    function getPageKey(url) {
+      const pageUrl = new URL(url.href);
+      pageUrl.hash = '';
+      return pageUrl.href;
+    }
+
+    async function getPageHtml(url) {
+      const key = getPageKey(url);
+
+      if (pageCache.has(key)) {
+        return pageCache.get(key);
+      }
+
+      const response = await fetch(key, { cache: 'force-cache' });
+
+      if (!response.ok) {
+        throw new Error(`Unable to load page: ${key}`);
+      }
+
+      const html = await response.text();
+      pageCache.set(key, html);
+      return html;
+    }
+
+    function preloadInternalPages() {
+      document.querySelectorAll('a').forEach((link) => {
+        if (!isInternalPageLink(link)) {
+          return;
+        }
+
+        getPageHtml(new URL(link.href, window.location.href)).catch(() => {});
+      });
     }
 
     function syncBackgroundShape(nextDocument) {
@@ -182,14 +217,7 @@
     }
 
     async function loadPage(url, addToHistory = true) {
-      const response = await fetch(url.href);
-
-      if (!response.ok) {
-        window.location.href = url.href;
-        return;
-      }
-
-      const html = await response.text();
+      const html = await getPageHtml(url);
       const nextDocument = new DOMParser().parseFromString(html, 'text/html');
       const nextMain = nextDocument.querySelector('main');
       const currentMain = document.querySelector('main');
@@ -200,8 +228,7 @@
       const nextStylesheet = nextDocument.querySelector('link[rel="stylesheet"][href*="../css/"]');
 
       if (!nextMain || !currentMain) {
-        window.location.href = url.href;
-        return;
+        throw new Error(`Invalid page: ${url.href}`);
       }
 
       document.title = nextDocument.title;
@@ -220,6 +247,7 @@
       }
 
       syncBackgroundShape(nextDocument);
+      preloadInternalPages();
 
       if (addToHistory) {
         history.pushState({}, '', url.href);
@@ -246,6 +274,9 @@
         window.location.reload();
       });
     });
+
+    pageCache.set(getPageKey(new URL(window.location.href)), document.documentElement.outerHTML);
+    preloadInternalPages();
   }
 
   document.querySelectorAll('.music-player').forEach((player) => {
