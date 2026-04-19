@@ -1,11 +1,3 @@
-# Arquivos do player LOFI
+﻿# Pasta de áudio
 
-Coloque aqui os arquivos de musica usados pelo player do topo.
-
-Nomes esperados pelo JavaScript:
-
-- `lofi-1.mp3`
-- `lofi-2.mp3`
-- `lofi-3.mp3`
-
-As músicas não estão sendo usadas pelo site atual, que agora está somente em HTML e CSS.
+Esta pasta não está sendo usada pelo site atual, que agora está somente em HTML e CSS.
