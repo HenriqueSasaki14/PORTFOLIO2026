@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ensino Medio - Henrique Sasaki Tannous</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/ensino-medio.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">HS</div>
+      <div class="music-player">
+        <audio class="music-audio" preload="metadata"></audio>
+        <div class="music-main">
+          <div class="music-heading">
+            <strong class="music-track">The Book of Night Vol. 1</strong>
+            <span class="music-artist">Lofi Girl</span>
+          </div>
+          <div class="music-progress-row">
+            <span class="music-current">00:00</span>
+            <input class="music-progress" type="range" min="0" max="100" value="0" aria-label="Progresso da musica">
+            <span class="music-duration">00:00</span>
+          </div>
+          <div class="music-controls">
+            <button class="music-control music-prev" type="button" aria-label="Musica anterior"><span></span></button>
+            <button class="music-control music-play" type="button" aria-label="Tocar musica"><span></span></button>
+            <button class="music-control music-next" type="button" aria-label="Proxima musica"><span></span></button>
+            <label class="music-volume-label">Vol
+              <input class="music-volume" type="range" min="0" max="100" value="55" aria-label="Volume da musica">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html#sobre">Sobre</a>
+      <a href="index.html#projetos">Projetos</a>
+      <a href="index.html#contato">Contato</a>
+      <a class="btn" href="escola.html">Voltar</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section page-hero">
+      <p class="eyebrow">Ensino Medio</p>
+      <h1>Atividades do Ensino Medio</h1>
+      <p class="lead">Organizacao dos trabalhos, pesquisas e entregas feitas ao longo do ano letivo.</p>
+    </section>
+
+    <section class="section">
+      <div class="grid trimester-grid">
+        <article class="project school-card">
+          <div class="pill">1 Trimestre</div>
+          <h3>1º trimestre</h3>
+          <p>Espaco reservado para as atividades e trabalhos do primeiro trimestre.</p>
+          <div class="subject-links">
+            <a href="ensino-medio-1-humanas.html">Humanas</a>
+            <a href="ensino-medio-1-matematica.html">Matemática e suas tecnologias</a>
+            <a href="ensino-medio-1-natureza.html">Ciências da Natureza</a>
+            <a href="ensino-medio-1-linguagens.html">Linguagens</a>
+          </div>
+        </article>
+
+        <article class="project school-card">
+          <div class="pill">2 Trimestre</div>
+          <h3>2º trimestre</h3>
+          <p>Espaco reservado para as atividades e trabalhos do segundo trimestre.</p>
+          <div class="subject-links">
+            <a>Humanas</a>
+            <a>Matemática e suas tecnologias</a>
+            <a>Ciências da Natureza</a>
+            <a>Linguagens</a>
+          </div>
+        </article>
+
+        <article class="project school-card">
+          <div class="pill">3 Trimestre</div>
+          <h3>3º trimestre</h3>
+          <p>Espaco reservado para as atividades e trabalhos do terceiro trimestre.</p>
+          <div class="subject-links">
+            <a>Humanas</a>
+            <a>Matemática e suas tecnologias</a>
+            <a>Ciências da Natureza</a>
+            <a>Linguagens</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Feito por Henrique Sasaki Tannous - 2026</p>
+  </footer>
+  <script src="../js/music-player.js"></script>
+</body>
+
+</html>

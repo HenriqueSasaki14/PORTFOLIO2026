@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projetos da Escola - Henrique Sasaki Tannous</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/escola.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">HS</div>
+      <div class="music-player">
+        <audio class="music-audio" preload="metadata"></audio>
+        <div class="music-main">
+          <div class="music-heading">
+            <strong class="music-track">The Book of Night Vol. 1</strong>
+            <span class="music-artist">Lofi Girl</span>
+          </div>
+          <div class="music-progress-row">
+            <span class="music-current">00:00</span>
+            <input class="music-progress" type="range" min="0" max="100" value="0" aria-label="Progresso da musica">
+            <span class="music-duration">00:00</span>
+          </div>
+          <div class="music-controls">
+            <button class="music-control music-prev" type="button" aria-label="Musica anterior"><span></span></button>
+            <button class="music-control music-play" type="button" aria-label="Tocar musica"><span></span></button>
+            <button class="music-control music-next" type="button" aria-label="Proxima musica"><span></span></button>
+            <label class="music-volume-label">Vol
+              <input class="music-volume" type="range" min="0" max="100" value="55" aria-label="Volume da musica">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html#sobre">Sobre</a>
+      <a href="index.html#projetos">Projetos</a>
+      <a href="index.html#contato">Contato</a>
+      <a class="btn" href="index.html">Voltar</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section page-hero">
+      <p class="eyebrow">SESI SENAI</p>
+      <div class="page-title">
+        <h1>Atividades e trabalhos escolares</h1>
+        <img src="../Images/sesi.jpg" alt="Logo SESI SENAI">
+      </div>
+      <p class="lead">Aqui vou reunir os projetos desenvolvidos durante o curso Tecnico em Desenvolvimento de Sistemas integrado ao Ensino médio.</p>
+    </section>
+
+    <section class="section">
+      <div class="grid school-grid">
+        <article class="project school-card">
+          <div class="pill">Ensino Médio</div>
+          <h3>Atividades do Ensino Médio</h3>
+          <p>Espaço para trabalhos, pesquisas, apresentações e atividades das matérias do Ensino Médio.</p>
+          <div class="links">
+            <a href="ensino-medio.html">Acessar área</a>
+          </div>
+        </article>
+
+        <article class="project school-card">
+          <div class="pill">Curso Técnico</div>
+          <h3>Técnico em Desenvolvimento de Sistemas</h3>
+          <p>Espaço para projetos, códigos, atividades práticas e entregas do curso técnico.</p>
+          <div class="links">
+            <a href="tecnico-desenvolvimento.html">Acessar área</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Feito por Henrique Sasaki Tannous - 2026</p>
+  </footer>
+  <script src="../js/music-player.js"></script>
+</body>
+
+</html>
