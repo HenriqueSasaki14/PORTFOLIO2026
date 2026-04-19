@@ -210,6 +210,28 @@
       return `/${pageName}${hash}`;
     }
 
+    function getRouteHash(url) {
+      const pageName = getPageName(url);
+      const routeName = pageName.replace(/\.html$/, '');
+
+      if (pageName === 'index.html') {
+        return url.hash || '#/';
+      }
+
+      return `#/${routeName}`;
+    }
+
+    function isPageRouteHash(hash) {
+      return hash === '#/' || hash.startsWith('#/');
+    }
+
+    function getUrlFromRouteHash(hash) {
+      const routeName = hash.replace(/^#\//, '') || 'index';
+      const pageName = routeName === 'index' ? 'index.html' : `${routeName}.html`;
+
+      return new URL(pageName, window.location.href);
+    }
+
     function getStylesheetUrl(pageName) {
       const cssFile = pageStylesheets.get(pageName);
 
@@ -393,11 +415,49 @@
       const link = event.target.closest('a');
 
       if (!isInternalPageLink(link)) {
+        const href = link && link.getAttribute('href');
+
+        if (href && href.startsWith('#') && !document.querySelector(href)) {
+          event.preventDefault();
+          loadPage(new URL('index.html', window.location.href), false).then(() => {
+            window.location.hash = href;
+          }).catch(() => {
+            isLoadingPage = false;
+          });
+        }
+
         return;
       }
 
       event.preventDefault();
+
+      if (isSpaShell()) {
+        const targetUrl = new URL(link.href, window.location.href);
+
+        if (getPageName(targetUrl) === 'index.html' && targetUrl.hash && !document.querySelector(targetUrl.hash)) {
+          loadPage(targetUrl, false).then(() => {
+            window.location.hash = targetUrl.hash;
+          }).catch(() => {
+            isLoadingPage = false;
+          });
+          return;
+        }
+
+        window.location.hash = getRouteHash(targetUrl);
+        return;
+      }
+
       loadPage(new URL(link.href, window.location.href)).catch(() => {
+        isLoadingPage = false;
+      });
+    });
+
+    window.addEventListener('hashchange', () => {
+      if (!isPageRouteHash(window.location.hash)) {
+        return;
+      }
+
+      loadPage(getUrlFromRouteHash(window.location.hash), false).catch(() => {
         isLoadingPage = false;
       });
     });
@@ -428,7 +488,9 @@
     history.replaceState({ portfolioPage: true }, '', window.location.href);
     preloadInternalPages();
 
-    const initialUrl = new URL(window.location.href);
+    const initialUrl = isPageRouteHash(window.location.hash)
+      ? getUrlFromRouteHash(window.location.hash)
+      : new URL(window.location.href);
 
     if (isSpaShell() && getPageName(initialUrl) !== 'index.html') {
       loadPage(initialUrl, false).catch(() => {
