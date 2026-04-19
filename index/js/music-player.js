@@ -1,4 +1,24 @@
 (function () {
+  if (window.self !== window.top) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .topbar,
+      .footer {
+        display: none !important;
+      }
+
+      body {
+        background: transparent !important;
+      }
+
+      main {
+        padding-top: 24px !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return;
+  }
+
   const tracks = [
     {
       title: 'Lofi Lo-Fi',
@@ -135,6 +155,10 @@
   function setupPersistentNavigation() {
     const stylesheet = document.querySelector('link[rel="stylesheet"][href*="css/"]');
     const pageCache = new Map();
+    const appMain = document.querySelector('main');
+    const homeMainMarkup = appMain ? appMain.innerHTML : '';
+    const homeMainClass = appMain ? appMain.className : '';
+    let pageFrame = null;
     const knownPages = [
       'index.html',
       'escola.html',
@@ -251,6 +275,96 @@
       const rootStylesheet = document.querySelector('link[rel="stylesheet"][href="css/index.css"]');
 
       return Boolean(script && rootStylesheet);
+    }
+
+    function getFrameUrl(url) {
+      const pageName = getPageName(url);
+
+      if (window.location.protocol === 'file:') {
+        return `html/${pageName}`;
+      }
+
+      return `/html/${pageName}`;
+    }
+
+    function getPageTitle(pageName) {
+      const titles = {
+        'index.html': 'Portfólio — Henrique Sasaki Tannous',
+        'escola.html': 'Projetos da Escola - Henrique Sasaki Tannous',
+        'ensino-medio.html': 'Ensino Medio - Henrique Sasaki Tannous',
+        'tecnico-desenvolvimento.html': 'Tecnico em Desenvolvimento de Sistemas - Henrique Sasaki Tannous',
+        'ensino-medio-1-humanas.html': 'Humanas - 1 Trimestre - Henrique Sasaki Tannous',
+        'ensino-medio-1-matematica.html': 'Matematica - 1 Trimestre - Henrique Sasaki Tannous',
+        'ensino-medio-1-natureza.html': 'Ciencias da Natureza - 1 Trimestre - Henrique Sasaki Tannous',
+        'ensino-medio-1-linguagens.html': 'Linguagens - 1 Trimestre - Henrique Sasaki Tannous'
+      };
+
+      return titles[pageName] || titles['index.html'];
+    }
+
+    function attachFrameNavigation() {
+      if (!pageFrame || !pageFrame.contentDocument) {
+        return;
+      }
+
+      const frameDocument = pageFrame.contentDocument;
+
+      frameDocument.addEventListener('click', (event) => {
+        const link = event.target.closest('a');
+
+        if (!isInternalPageLink(link)) {
+          return;
+        }
+
+        event.preventDefault();
+        showFramedPage(new URL(link.href, window.location.href), true);
+      });
+    }
+
+    function showHomePage(url, addToHistory = true) {
+      if (!appMain) {
+        return;
+      }
+
+      appMain.className = homeMainClass;
+      appMain.innerHTML = homeMainMarkup;
+      document.title = getPageTitle('index.html');
+
+      if (addToHistory) {
+        history.pushState({ portfolioPage: true }, '', getPublicUrl(new URL('index.html', window.location.href)));
+      }
+
+      scrollToPageTarget(url.hash);
+    }
+
+    function showFramedPage(url, addToHistory = true) {
+      if (!appMain) {
+        return;
+      }
+
+      const pageName = getPageName(url);
+
+      if (pageName === 'index.html') {
+        showHomePage(url, addToHistory);
+        return;
+      }
+
+      if (!pageFrame) {
+        pageFrame = document.createElement('iframe');
+        pageFrame.className = 'page-frame';
+        pageFrame.title = 'Conteúdo do portfólio';
+        pageFrame.addEventListener('load', attachFrameNavigation);
+      }
+
+      appMain.className = 'frame-shell';
+      appMain.innerHTML = '';
+      appMain.appendChild(pageFrame);
+      document.title = getPageTitle(pageName);
+      pageFrame.src = getFrameUrl(url);
+
+      if (addToHistory) {
+        history.pushState({ portfolioPage: true }, '', getPublicUrl(url));
+      }
     }
 
     function addResourceHint(href, rel, as) {
@@ -419,11 +533,7 @@
 
         if (href && href.startsWith('#') && !document.querySelector(href)) {
           event.preventDefault();
-          loadPage(new URL('index.html', window.location.href), false).then(() => {
-            window.location.hash = href;
-          }).catch(() => {
-            isLoadingPage = false;
-          });
+          showHomePage(new URL(`index.html${href}`, window.location.href), true);
         }
 
         return;
@@ -433,17 +543,7 @@
 
       if (isSpaShell()) {
         const targetUrl = new URL(link.href, window.location.href);
-
-        if (getPageName(targetUrl) === 'index.html' && targetUrl.hash && !document.querySelector(targetUrl.hash)) {
-          loadPage(targetUrl, false).then(() => {
-            window.location.hash = targetUrl.hash;
-          }).catch(() => {
-            isLoadingPage = false;
-          });
-          return;
-        }
-
-        window.location.hash = getRouteHash(targetUrl);
+        showFramedPage(targetUrl, true);
         return;
       }
 
@@ -453,6 +553,10 @@
     });
 
     window.addEventListener('hashchange', () => {
+      if (isSpaShell()) {
+        return;
+      }
+
       if (!isPageRouteHash(window.location.hash)) {
         return;
       }
@@ -463,6 +567,11 @@
     });
 
     window.addEventListener('popstate', () => {
+      if (isSpaShell()) {
+        showFramedPage(new URL(window.location.href), false);
+        return;
+      }
+
       loadPage(new URL(window.location.href), false).catch(() => {
         isLoadingPage = false;
       });
@@ -479,7 +588,14 @@
         }
 
         event.intercept({
-          handler: () => loadPage(url, false)
+          handler: () => {
+            if (isSpaShell()) {
+              showFramedPage(url, false);
+              return Promise.resolve();
+            }
+
+            return loadPage(url, false);
+          }
         });
       });
     }
@@ -493,9 +609,7 @@
       : new URL(window.location.href);
 
     if (isSpaShell() && getPageName(initialUrl) !== 'index.html') {
-      loadPage(initialUrl, false).catch(() => {
-        isLoadingPage = false;
-      });
+      showFramedPage(initialUrl, false);
     }
   }
 
