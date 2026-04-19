@@ -1102,18 +1102,26 @@ textarea {
 
 /* SPA frame shell */
 .frame-shell {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - 112px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .page-frame {
-  display: block;
-  width: 100%;
-  min-height: calc(100vh - 112px);
-  border: 0;
-  background: transparent;
+  display: block !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  height: calc(100vh - 112px) !important;
+  min-height: 760px !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+main.frame-shell + .footer {
+  display: none;
 }
 
 .brand .music-current,

@@ -88,6 +88,7 @@ export function initFrameRouter() {
   let pageFrame = null;
 
   function showHomePage(url, addToHistory = true) {
+    appMain.removeAttribute('style');
     appMain.className = homeMainClass;
     appMain.innerHTML = homeMainMarkup;
     document.title = pageTitles['index.html'];
@@ -141,10 +142,27 @@ export function initFrameRouter() {
       pageFrame = document.createElement('iframe');
       pageFrame.className = 'page-frame';
       pageFrame.title = 'Conteúdo do portfólio';
+      pageFrame.setAttribute('width', '100%');
+      pageFrame.setAttribute('height', '100%');
+      Object.assign(pageFrame.style, {
+        display: 'block',
+        width: '100%',
+        minWidth: '100%',
+        height: 'calc(100vh - 112px)',
+        minHeight: '760px',
+        border: '0',
+        background: 'transparent'
+      });
       pageFrame.addEventListener('load', attachFrameNavigation);
     }
 
     appMain.className = 'frame-shell';
+    Object.assign(appMain.style, {
+      width: '100%',
+      maxWidth: 'none',
+      margin: '0',
+      padding: '0'
+    });
     appMain.replaceChildren(pageFrame);
     pageFrame.src = getFrameUrl(url);
     document.title = pageTitles[pageName] || pageTitles['index.html'];
