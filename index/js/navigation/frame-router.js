@@ -136,8 +136,12 @@ export function initFrameRouter() {
   let appMain = document.querySelector('main');
   const stylesheet = document.querySelector('link[rel="stylesheet"][href*="css/"]');
 
-  if (!appMain || !stylesheet) {
+  if (!appMain) {
     return;
+  }
+
+  if (stylesheet) {
+    stylesheet.setAttribute('href', getStylesheetUrl('index.html'));
   }
 
   const homeMain = appMain.cloneNode(true);
@@ -153,7 +157,6 @@ export function initFrameRouter() {
     appMain.replaceWith(nextMain);
     appMain = nextMain;
     document.title = pageTitles[pageName] || pageTitles['index.html'];
-    stylesheet.setAttribute('href', getStylesheetUrl(pageName));
 
     if (addToHistory) {
       history.pushState({ portfolioPage: true }, '', getPublicUrl(url));

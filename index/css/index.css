@@ -442,6 +442,102 @@ main {
   margin-top: auto;
 }
 
+/* Internal page content styles used by the SPA router */
+.page-hero {
+  padding-top: 48px;
+  padding-bottom: 24px;
+}
+
+.page-hero h1 {
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.page-title h1 {
+  margin: 0;
+}
+
+.page-title img {
+  width: 118px;
+  height: 118px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  margin-left: 24px;
+}
+
+.school-grid,
+.trimester-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.school-card {
+  min-height: 210px;
+  align-content: start;
+}
+
+.school-card .links,
+.school-card .subject-links {
+  margin-top: auto;
+}
+
+.subject-links {
+  display: grid;
+  gap: 8px;
+}
+
+.subject-links a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.subject-links a:hover {
+  border-color: rgba(138, 243, 255, 0.45);
+  color: var(--text);
+}
+
+.activity-card {
+  min-height: 240px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
+  align-items: center;
+}
+
+.activity-content {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-height: 100%;
+}
+
+.activity-image {
+  width: 280px;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  justify-self: end;
+}
+
 .contact {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -488,6 +584,26 @@ textarea {
   .category-title {
     align-items: flex-start;
     flex-direction: column-reverse;
+  }
+
+  .page-title {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+
+  .page-title img {
+    width: 96px;
+    height: 96px;
+    margin-left: 0;
+  }
+
+  .activity-card {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-image {
+    width: 100%;
+    justify-self: stretch;
   }
 
   .about-section {
