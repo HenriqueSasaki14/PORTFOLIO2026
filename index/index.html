@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio — Henrique Sasaki Tannous</title>
+  <link rel="icon" type="image/svg+xml" href="Images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+  <div class="bg-shape"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">HS</div>
+      <div class="music-player">
+        <audio class="music-audio" preload="metadata"></audio>
+        <div class="music-main">
+          <div class="music-heading">
+            <strong class="music-track">The Book of Night Vol. 1</strong>
+            <span class="music-artist">Lofi Girl</span>
+          </div>
+          <div class="music-progress-row">
+            <span class="music-current">00:00</span>
+            <input class="music-progress" type="range" min="0" max="100" value="0" aria-label="Progresso da musica">
+            <span class="music-duration">00:00</span>
+          </div>
+          <div class="music-controls">
+            <button class="music-control music-prev" type="button" aria-label="Musica anterior"><span></span></button>
+            <button class="music-control music-play" type="button" aria-label="Tocar musica"><span></span></button>
+            <button class="music-control music-next" type="button" aria-label="Proxima musica"><span></span></button>
+            <label class="music-volume-label">Vol
+              <input class="music-volume" type="range" min="0" max="100" value="55" aria-label="Volume da musica">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#sobre">Sobre</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="badge">Técnico em Desenvolvimento de Sistemas integrado ao ensino médio</p>
+        <h1>Olá, sou <span>Henrique Sasaki Tannous</span>. Seja bem vindo ao meu portfolio.</h1>
+        <p class="lead">Focado em full-stack, automação e integração. Busco estágio para aplicar o que estudo em
+          projetos reais.</p>
+        <div class="actions">
+          <a class="btn primary" href="#projetos">Ver projetos</a>
+          <a class="btn ghost" href="#contato">Disponibilidade</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="avatar">
+          <img src="Images/Eu.jpg" alt="Foto de Henrique Sasaki" />
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre" class="section about-section">
+      <div class="about-content">
+        <div class="about-text">
+          <p class="eyebrow">Sobre</p>
+          <h2>Quem sou eu</h2>
+          <p>Me chamo Henrique Sasaki, tenho 17 anos, e sou estudante do curso Técnico em Desenvolvimento de Sistemas
+            integrado ao Ensino Médio, na instituição SESI SENAI. Também sou atleta de alto rendimento, campeão
+            Brasileiro de ILCA e velejador de Santa Catarina.</p>
+        </div>
+        <div class="card about-skills">
+          <h3>Linguagens</h3>
+          <ul class="tags">
+            <li>HTML5<img src="Images/Html.png" alt=""></li>
+            <li>CSS3 <img src="Images/Css.png" alt=""></li>
+            <li>JavaScript <img src="Images/Js.png" alt=""></li>
+            <li>Flutter <img src="Images/Flutter.png" alt=""></li>
+            <li>Git <img src="Images/Git.png" alt=""></li>
+            <li>Python básico <img src="Images/python.png" alt=""></li>
+            <li>C# intermediário<img src="Images/Csharp_Logo.png" alt=""></li>
+            <li>SQL Básico<img src="Images/sql.png" alt=""></li>
+          </ul>
+          <h3>Cursos/Certificações/Competências</h3>
+          <ul class="list">
+            <li>Curso Técnico em Desenvolvimento de Sistemas</li>
+            <li>Word e Excel básicos</li>
+            <li>Canva avançado</li>
+            <li>Maior nota possível no Cambridge Test em 2023 - B1</li>
+            <li>Inglês avançado/fluente</li>
+            <li>Espanhol básico</li>
+          </ul>
+        </div>
+      </div>
+      <figure class="about-photo">
+        <img src="Images/FotoVela.jpg" alt="Foto de Henrique Sasaki">
+      </figure>
+    </section>
+
+    <section id="projetos" class="section">
+      <p class="eyebrow">Projetos</p>
+      <h2>Escolha uma categoria</h2>
+      <div class="category-grid">
+        <a class="project category-card" href="escola.html">
+          <div class="pill">SESI SENAI</div>
+          <div class="category-title">
+            <h3>Atividades e trabalhos escolares</h3>
+            <img class="category-image" src="Images/sesi.jpg" alt="Logo SESI SENAI">
+          </div>
+          <p>Espaco para organizar os projetos, tarefas e entregas feitas para a escola.</p>
+          <span class="category-link">Acessar pagina</span>
+        </a>
+        <a class="project category-card" href="projetos-pessoais.html">
+          <div class="pill">Pessoal</div>
+          <h3>Projetos pessoais</h3>
+          <p>Area reservada para projetos criados fora das atividades escolares.</p>
+          <span class="category-link">Em breve</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="contato" class="section contact">
+      <div>
+        <p class="eyebrow">Contato</p>
+        <h2>Vamos conversar</h2>
+        <p>Aberto para estágio, freelas e colaboração em projetos.</p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:henrique.sasaki14@gmail.com">Email</a>
+          <a class="btn ghost" href="https://www.instagram.com/henrique_sasaki_/" target="_blank" rel="noreferrer">Instagram</a>
+        </div>
+      </div>
+      <form class="card form">
+        <label>Nome<input type="text" name="nome" placeholder="Seu nome" required></label>
+        <label>Email<input type="email" name="email" placeholder="seu@gmail.com" required></label>
+        <label>Mensagem<textarea name="mensagem" rows="4" placeholder="Como posso ajudar?" required></textarea></label>
+        <button type="submit" class="btn primary full">Enviar</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Feito por Henrique Sasaki Tannous — 2026</p>
+  </footer>
+  <script src="js/music-player.js"></script>
+</body>
+
+</html>

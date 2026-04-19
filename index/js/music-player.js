@@ -133,7 +133,7 @@
   }
 
   function setupPersistentNavigation() {
-    const stylesheet = document.querySelector('link[rel="stylesheet"][href*="../css/"]');
+    const stylesheet = document.querySelector('link[rel="stylesheet"][href*="css/"]');
     const pageCache = new Map();
     const knownPages = [
       'index.html',
@@ -189,6 +189,10 @@
 
     function getFetchUrl(url) {
       if (window.location.protocol === 'file:') {
+        if (isSpaShell()) {
+          return new URL(`html/${getPageName(url)}`, window.location.href).href;
+        }
+
         return url.href;
       }
 
@@ -218,6 +222,13 @@
       }
 
       return `/css/${cssFile}`;
+    }
+
+    function isSpaShell() {
+      const script = document.querySelector('script[src$="js/music-player.js"]');
+      const rootStylesheet = document.querySelector('link[rel="stylesheet"][href="css/index.css"]');
+
+      return Boolean(script && rootStylesheet);
     }
 
     function addResourceHint(href, rel, as) {
@@ -413,9 +424,17 @@
       });
     }
 
-    writeCachedPage(getPageKey(new URL(window.location.href)), document.documentElement.outerHTML);
+    writeCachedPage('/index.html', document.documentElement.outerHTML);
     history.replaceState({ portfolioPage: true }, '', window.location.href);
     preloadInternalPages();
+
+    const initialUrl = new URL(window.location.href);
+
+    if (isSpaShell() && getPageName(initialUrl) !== 'index.html') {
+      loadPage(initialUrl, false).catch(() => {
+        isLoadingPage = false;
+      });
+    }
   }
 
   document.querySelectorAll('.music-player').forEach((player) => {
