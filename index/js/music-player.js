@@ -309,10 +309,28 @@
 
       const frameDocument = pageFrame.contentDocument;
 
+      frameDocument.querySelectorAll('a[href]').forEach((link) => {
+        if (!isInternalPageLink(link)) {
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noreferrer');
+        }
+      });
+
       frameDocument.addEventListener('click', (event) => {
         const link = event.target.closest('a');
 
+        if (!link) {
+          return;
+        }
+
         if (!isInternalPageLink(link)) {
+          const href = link.getAttribute('href');
+
+          if (href && !href.startsWith('#')) {
+            event.preventDefault();
+            window.open(link.href, '_blank', 'noreferrer');
+          }
+
           return;
         }
 
