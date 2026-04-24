@@ -5,6 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfólio — Henrique Sasaki Tannous</title>
+  <meta name="description" content="Portfólio de Henrique Sasaki Tannous — estudante de Técnico em Desenvolvimento de Sistemas, SESI SENAI. Focado em full-stack, automação e integração.">
+  <meta property="og:title" content="Portfólio — Henrique Sasaki Tannous">
+  <meta property="og:description" content="Técnico em Desenvolvimento de Sistemas. Focado em full-stack, automação e integração. Busco estágio para aplicar o que estudo em projetos reais.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="../Images/Eu.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Portfólio — Henrique Sasaki Tannous">
+  <meta name="twitter:description" content="Técnico em Desenvolvimento de Sistemas. Focado em full-stack, automação e integração.">
   <link rel="icon" type="image/svg+xml" href="../Images/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +68,7 @@
           projetos reais.</p>
         <div class="actions">
           <a class="btn primary" href="#projetos">Ver projetos</a>
-          <a class="btn ghost" href="#contato">Disponibilidade</a>
+          <a class="btn ghost" href="#contato">Entre em contato</a>
         </div>
       </div>
       <div class="hero-card">
@@ -140,7 +148,8 @@
           <a class="btn ghost" href="https://www.instagram.com/henrique_sasaki_/" target="_blank" rel="noreferrer">Instagram</a>
         </div>
       </div>
-      <form class="card form">
+      <form class="card form" name="contact" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="contact">
         <label>Nome<input type="text" name="nome" placeholder="Seu nome" required></label>
         <label>Email<input type="email" name="email" placeholder="seu@gmail.com" required></label>
         <label>Mensagem<textarea name="mensagem" rows="4" placeholder="Como posso ajudar?" required></textarea></label>

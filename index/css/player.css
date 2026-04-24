@@ -209,6 +209,13 @@
 
 @media (max-width: 560px) {
   .lp {
+    max-width: 120px;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .lp-info,
+  .lp-volume-wrap {
     display: none;
   }
 }
