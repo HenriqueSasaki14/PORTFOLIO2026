@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Técnico - 1º trimestre</title>
+  <link rel="icon" type="image/svg+xml" href="../Images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/activities.css" />
+  <link rel="stylesheet" href="../css/tecnico-desenvolvimento-1.css" />
+  <link rel="stylesheet" href="../css/player.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">HS</div>
+    </div>
+
+    <!-- LoFi Music Player -->
+    <div class="lp" id="lofi-player">
+      <div class="lp-controls">
+        <button class="lp-btn" id="lp-prev" aria-label="Faixa anterior">&#x23EE;</button>
+        <button class="lp-btn" id="lp-playpause" aria-label="Play">&#x25B6;</button>
+        <button class="lp-btn" id="lp-next" aria-label="Próxima faixa">&#x23ED;</button>
+      </div>
+      <div class="lp-info">
+        <span class="lp-title" id="lp-title">Carregando...</span>
+        <span class="lp-artist" id="lp-artist"></span>
+        <div class="lp-progress-row">
+          <span class="lp-time" id="lp-current">0:00</span>
+          <div class="lp-progress" id="lp-progress">
+            <div class="lp-bar" id="lp-bar"></div>
+          </div>
+          <span class="lp-time" id="lp-duration">0:00</span>
+        </div>
+      </div>
+      <div class="lp-volume-wrap">
+        <span class="lp-vol-icon">🔊</span>
+        <input type="range" id="lp-volume" min="0" max="100" value="50" aria-label="Volume">
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="../index.html#sobre">Sobre</a>
+      <a href="../index.html#projetos">Projetos</a>
+      <a href="../index.html#contato">Contato</a>
+      <a class="btn" href="tecnico-desenvolvimento.html">Voltar</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section page-hero">
+      <p class="eyebrow">Curso Técnico - 1º trimestre</p>
+      <h1>Técnico em Desenvolvimento de Sistemas</h1>
+      <p class="lead">Espaço para adicionar as atividades técnicas desenvolvidas no primeiro trimestre.</p>
+    </section>
+
+    <section class="section">
+      <div class="grid activity-grid">
+        <article class="activity-card technical-activity-card stacked-media">
+          <div class="activity-content">
+            <div class="pill">Grand Prix</div>
+            <h3>Grand Prix</h3>
+            <p>No GrandPrix, nos foi apresentados problemas reais de empresas e tivemos que desenvolver soluções para
+              eles.</p>
+            <div class="links">
+              <a href="https://canva.link/0ygdopb27nspaj5">Acessar nosso Lean</a>
+            </div>
+            <div class="video-grid" aria-label="Vídeos da atividade Grand Prix">
+              <video controls preload="metadata">
+                <source src="/index/Activity_images/tecnico/PitchGP.mp4" type="video/mp4">
+              </video>
+              <video controls preload="metadata">
+                <source src="/index/Activity_images/tecnico/PitchTecnicoGP.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="grid activity-grid">
+        <article class="activity-card technical-activity-card">
+          <div class="activity-content">
+            <div class="pill">Modelagem de Sistemas</div>
+            <h3>SA Modelagem de Sistemas</h3>
+            <p>Nesta SA, nós tínhamos de criar uma empresa fictícia completa e
+              modelar um sistema digital que apoie seu funcionamento.</p>
+            <div class="links">
+              <a href="https://docs.google.com/document/d/180LLFai3jvLrczwgOEKKCahT9tiQyHx1_25gMdSripo/edit?usp=sharing">Link para o documento</a>
+            </div>
+          </div>
+          <img class="activity-image" src="../Activity_images/tecnico/SAModelagem.png" alt="Imagem da atividade SA Modelagem de Sistemas">
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Feito por Henrique Sasaki Tannous - 2026</p>
+  </footer>
+  <script src="../js/router.js"></script>
+  <script src="../js/player.js"></script>
+</body>
+
+</html>

@@ -79,7 +79,7 @@
 .lp-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--accent, #8af3ff), var(--accent-2, #ffb86c));
+  background: var(--accent, #c9a87c);
   border-radius: 999px;
   pointer-events: none;
   transition: width 0.3s linear;
@@ -118,14 +118,14 @@
   width: 32px;
   height: 32px;
   font-size: 14px;
-  color: var(--accent, #8af3ff);
-  background: rgba(138, 243, 255, 0.1);
+  color: var(--accent, #c9a87c);
+  background: rgba(201, 168, 124, 0.1);
   border-radius: 50%;
 }
 
 #lp-playpause:hover {
-  background: rgba(138, 243, 255, 0.2);
-  color: var(--accent, #8af3ff);
+  background: rgba(201, 168, 124, 0.2);
+  color: var(--accent, #c9a87c);
 }
 
 /* ── Volume ── */
@@ -166,9 +166,8 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--accent, #8af3ff);
+  background: var(--accent, #c9a87c);
   cursor: pointer;
-  box-shadow: 0 0 4px rgba(138, 243, 255, 0.6);
   transition: transform 0.15s ease;
 }
 
@@ -180,7 +179,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--accent, #8af3ff);
+  background: var(--accent, #c9a87c);
   border: none;
   cursor: pointer;
 }
