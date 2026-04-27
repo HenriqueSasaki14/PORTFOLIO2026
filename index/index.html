@@ -21,9 +21,16 @@
     rel="stylesheet">
   <link rel="stylesheet" href="css/index.css" />
   <link rel="stylesheet" href="css/player.css" />
+  <link rel="stylesheet" href="css/animations.css" />
 </head>
 
 <body>
+  <div class="page-bg" aria-hidden="true">
+    <video class="page-bg-video" autoplay muted loop playsinline>
+      <source src="Images/White and Black Wallpaper Engine 1 Hour.mp4" type="video/mp4">
+    </video>
+    <div class="page-bg-overlay"></div>
+  </div>
   <header class="topbar">
     <div class="brand">
       <div class="logo">HS</div>
@@ -60,7 +67,7 @@
 
   <main>
     <section class="hero">
-<div class="hero-text">
+      <div class="hero-text">
         <p class="badge">Técnico em Desenvolvimento de Sistemas integrado ao Ensino Médio</p>
         <h1>Olá, sou <span>Henrique Sasaki Tannous</span>. Seja bem-vindo ao meu portfólio.</h1>
         <p class="lead">Focado em full-stack, automação e integração. Busco estágio para aplicar o que estudo em
@@ -161,6 +168,7 @@
   </footer>
   <script src="js/router.js"></script>
   <script src="js/player.js"></script>
+  <script src="js/animations.js"></script>
 </body>
 
 </html>
