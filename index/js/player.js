@@ -135,7 +135,7 @@
 
   // ── Audio events ─────────────────────────────────────────────────────────────
   audio.addEventListener('timeupdate', updateProgress);
-  audio.addEventListener('ended', () => nextTrack());
+  audio.addEventListener('ended', () => loadTrack((state.index + 1) % tracks.length, 0, true));
   audio.addEventListener('play',  updateUI);
   audio.addEventListener('pause', updateUI);
 
