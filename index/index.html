@@ -28,12 +28,6 @@
 </head>
 
 <body>
-  <div class="page-bg" aria-hidden="true">
-    <video class="page-bg-video" autoplay muted loop playsinline>
-      <source src="Images/White and Black Wallpaper Engine 1 Hour.mp4" type="video/mp4">
-    </video>
-    <div class="page-bg-overlay"></div>
-  </div>
   <header class="topbar">
     <div class="brand">
       <div class="logo">HS</div>
@@ -72,20 +66,28 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero-parallax" data-parallax="hero" aria-label="Henrique Sasaki sob o céu estrelado, em uma trilha noturna">
+      <div class="hpx-layer hpx-bg" data-parallax-layer="bg"></div>
+      <div class="hpx-layer hpx-word" data-parallax-layer="word" aria-hidden="true">
+        <span>PORTFÓLIO</span>
+      </div>
+      <div class="hpx-layer hpx-subject" data-parallax-layer="subject"></div>
+      <div class="hero-parallax-scrim"></div>
+    </section>
+
+    <section class="hero-intro">
       <div class="hero-text">
-        <p class="badge">Técnico em Desenvolvimento de Sistemas integrado ao Ensino Médio</p>
-        <h1>Olá, sou <span>Henrique Sasaki Tannous</span>. Seja bem-vindo ao meu portfólio.</h1>
+        <p class="hero-eyebrow">Técnico em Desenvolvimento de Sistemas integrado ao Ensino Médio</p>
+        <h1>
+          <span class="hero-kicker">Olá, sou</span>
+          <span class="hero-glitch" data-text="HENRIQUE">HENRIQUE</span>
+          <span class="hero-surname">Sasaki Tannous</span>
+        </h1>
         <p class="lead">Focado em full-stack, automação e integração. Busco estágio para aplicar o que estudo em
           projetos reais.</p>
         <div class="actions">
           <a class="btn primary" href="#projetos">Ver projetos</a>
           <a class="btn ghost" href="#contato">Entre em contato</a>
-        </div>
-      </div>
-      <div class="hero-card">
-        <div class="avatar">
-          <img src="Images/Eu.jpg" alt="Foto de Henrique Sasaki" />
         </div>
       </div>
     </section>
@@ -194,6 +196,8 @@
   <script src="js/router.js"></script>
   <script src="js/player.js"></script>
   <script src="js/animations.js"></script>
+  <script src="js/vendor/lenis.min.js"></script>
+  <script src="js/parallax.js"></script>
 </body>
 
 </html>

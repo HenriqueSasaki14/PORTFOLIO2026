@@ -10,15 +10,6 @@
   transform: none;
 }
 
-/* ── Hero entrance (CSS keyframe — dispara ao carregar) ── */
-.hero-text {
-  animation: fade-up 0.7s ease both;
-}
-
-.hero-card {
-  animation: fade-up 0.7s 0.15s ease both;
-}
-
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -28,6 +19,105 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* ── Intro — revela em cascata quando entra na tela ──
+   O bloco fica abaixo do parallax de altura cheia, então só aparece depois
+   de rolar; animar na carga da página passaria despercebido. animations.js
+   adiciona .is-visible ao cruzar a viewport.
+
+   Tudo abaixo depende de .js-reveal, que o animations.js põe no <html>.
+   Se o script falhar, a classe nunca aparece e o texto fica visível — o
+   estado escondido só existe quando há JS para revelá-lo. */
+.js-reveal .hero-intro .hero-text > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.js-reveal .hero-intro.is-visible .hero-text > * {
+  opacity: 1;
+  transform: none;
+}
+
+.js-reveal .hero-intro .hero-text > .hero-eyebrow { transition-delay: 0.00s; }
+.js-reveal .hero-intro .hero-text > h1            { transition-delay: 0.10s; }
+.js-reveal .hero-intro .hero-text > .lead         { transition-delay: 0.20s; }
+.js-reveal .hero-intro .hero-text > .actions      { transition-delay: 0.30s; }
+
+/* O container em si não anima — só escalona os filhos. Sem isto, o bloco
+   inteiro faria fade e os filhos fariam outro por cima. */
+.hero-intro.reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* ── Glitch no nome ──
+   Duas cópias do texto (via content: attr(data-text)) piscam por cima do
+   original com recortes e deslocamentos. Elas precisam de um fundo opaco
+   igual ao da página para mascarar o texto de baixo — daí var(--bg).
+   O ciclo é longo (8s) e os disparos são curtos, para dar um defeito
+   ocasional em vez de agitação constante. */
+.hero-glitch {
+  position: relative;
+  display: block;
+  color: var(--accent);
+  animation: glitch-tint 8s infinite step-end;
+}
+
+.hero-glitch::before,
+.hero-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-glitch::before {
+  animation: glitch-a 8s infinite linear;
+  z-index: 2;
+}
+
+.hero-glitch::after {
+  animation: glitch-b 8s infinite linear;
+  z-index: 3;
+}
+
+@keyframes glitch-tint {
+  0%, 47%      { color: var(--accent); text-shadow: none; }
+  47.1%, 48.9% { text-shadow: -2px 0 #5ad6e8, 2px 0 #e85a9a; }
+  49%, 95%     { color: var(--text); text-shadow: none; }
+  95.1%, 96.9% { text-shadow: 2px 0 #5ad6e8, -2px 0 #e85a9a; }
+  97%, 100%    { color: var(--accent); text-shadow: none; }
+}
+
+@keyframes glitch-a {
+  0%, 47%      { opacity: 0; transform: translate(0); }
+  47.1%        { opacity: 1; color: #5ad6e8; clip-path: polygon(0 0, 100% 0, 100% 44%, 0 44%); transform: translate(-8px, -4px) skew(14deg); }
+  48%          { color: #e85a9a; clip-path: polygon(0 12%, 100% 4%, 100% 32%, 0 36%); transform: translate(8px, 4px) skew(-14deg); }
+  48.9%        { opacity: 1; }
+  49%, 95%     { opacity: 0; transform: translate(0); }
+  95.1%        { opacity: 1; color: #5ad6e8; clip-path: polygon(0 58%, 100% 54%, 100% 100%, 0 100%); transform: translate(7px, -3px) skew(8deg); }
+  96%          { color: #e85a9a; clip-path: polygon(0 22%, 100% 22%, 100% 100%, 0 78%); transform: translate(-6px, 3px) skew(-8deg); }
+  96.9%        { opacity: 1; }
+  97%, 100%    { opacity: 0; }
+}
+
+@keyframes glitch-b {
+  0%, 47%      { opacity: 0; transform: translate(0); }
+  47.1%        { opacity: 1; color: #b9f27c; clip-path: polygon(0 56%, 100% 56%, 100% 100%, 0 100%); transform: translate(8px, 4px); }
+  48%          { color: #f2705c; clip-path: polygon(0 20%, 100% 20%, 100% 100%, 0 80%); transform: translate(-8px, -4px) skew(9deg); }
+  48.9%        { opacity: 1; }
+  49%, 95%     { opacity: 0; transform: translate(0); }
+  95.1%        { opacity: 1; color: #b9f27c; clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); transform: translate(-7px, -4px); }
+  96%          { color: #f2705c; clip-path: polygon(0 8%, 100% 0, 100% 30%, 0 34%); transform: translate(7px, 4px) skew(-12deg); }
+  96.9%        { opacity: 1; }
+  97%, 100%    { opacity: 0; }
 }
 
 /* ── Nav links — underline animado ── */
@@ -115,8 +205,21 @@
   transform: translateX(3px);
 }
 
-/* ── Respeita preferência por menos movimento ── */
+/* ── Respeita preferência por menos movimento ──
+   A cascata do .hero-intro fica de fora de propósito: foi pedida
+   explicitamente e é disparada pela rolagem, não sozinha. Se algum dia
+   quiser desligá-la aqui também, acrescente:
+     .js-reveal .hero-intro .hero-text > * { opacity: 1; transform: none; }
+   Nunca a esconda sem um caminho que a revele — sem isso o texto some. */
 @media (prefers-reduced-motion: reduce) {
+  /* O glitch continua ligado aqui por pedido explícito. Ele pisca sozinho
+     em loop, que normalmente é o tipo de movimento que esta preferência
+     contém — para desligá-lo para quem a ativou, basta reinstalar:
+       .hero-glitch, .hero-glitch::before, .hero-glitch::after {
+         animation: none;
+       }
+       .hero-glitch::before, .hero-glitch::after { opacity: 0; }        */
+
   .reveal,
   .hero-text,
   .hero-card {

@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  // Marks that JS is running, so CSS can safely hide things it intends to
+  // reveal. Without this, a script failure would leave content invisible.
+  document.documentElement.classList.add('js-reveal');
+
   var SELECTORS = [
     '.project',
     '.category-card',
@@ -9,6 +13,7 @@
     '.about-skills',
     '.form',
     '.contact > div',
+    '.hero-intro',
   ].join(', ');
 
   var revealObserver = new IntersectionObserver(function (entries) {

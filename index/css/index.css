@@ -14,6 +14,27 @@
   box-sizing: border-box;
 }
 
+/* ── Lenis smooth scroll ──
+   Lenis drives scrolling itself, so the native smooth behaviour has to be
+   off or the two fight over the same anchor jump. Classes are applied to
+   <html> by the library. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: 'Space Grotesk', system-ui, sans-serif;
@@ -210,48 +231,156 @@ main {
   border-top: 1px solid var(--border);
 }
 
-/* ── Background vídeo global ── */
-.page-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
+/* ── Hero (layered parallax) ──────────────────────────────────────────────
+   Depth is built from separate layers cut out of the same photo. Layers
+   share background-size/position so they line up exactly at rest; JS then
+   drives them at different rates on scroll. Order back→front:
+     bg plate → giant wordmark → subject cutout → text content
+   Putting the wordmark *between* the plate and the subject is what makes
+   the subject read as standing in front of it.                            */
+.hero-parallax {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  max-height: 920px;
+  display: flex;
+  align-items: flex-end;
   overflow: hidden;
+  background: #07070a;
 }
 
-.page-bg-video {
+/* Generous vertical bleed: layers travel up to ~22% of the hero's height,
+   so they need that much extra beyond each edge or they would uncover the
+   hero's background (bg plate) or clip the subject's feet (subject layer). */
+.hpx-layer {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.30;
+  inset: -24% 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center 52%;
+  pointer-events: none;
+  will-change: transform;
 }
 
-.page-bg-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 10, 11, 0.62);
+.hpx-bg {
+  background-image: url('../Images/Eu-bg.jpg');
+  z-index: 0;
 }
 
-/* ── Hero ── */
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: 48px;
+.hpx-subject {
+  background-image: url('../Images/Eu-subject.png');
+  z-index: 2;
+}
+
+.hpx-word {
+  z-index: 1;
+  display: flex;
   align-items: center;
-  padding: 72px 0 80px;
+  justify-content: center;
+  user-select: none;
 }
 
-.hero-text {
-  align-self: center;
-}
-
-.hero-text h1 {
-  font-size: clamp(28px, 3.5vw, 48px);
-  line-height: 1.15;
+/* Nudged above centre so the wordmark reads across the sky behind the
+   subject's head, not down where the text block sits. */
+.hpx-word span {
+  font-size: clamp(64px, 15vw, 210px);
   font-weight: 700;
-  margin: 12px 0 16px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: rgba(242, 237, 232, 0.16);
+  transform: translateY(-12%);
+}
+
+.hero-parallax-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,
+      rgba(10, 10, 11, 0.55) 0%,
+      rgba(10, 10, 11, 0.1) 32%,
+      rgba(10, 10, 11, 0.25) 62%,
+      rgba(10, 10, 11, 0.9) 100%);
+  pointer-events: none;
+}
+
+/* Intro block — sits between the parallax image and the About section, so
+   the photo is left uncluttered and the copy gets its own quiet space. */
+.hero-intro {
+  padding: clamp(72px, 13vh, 152px) 0 clamp(64px, 10vh, 120px);
+  text-align: center;
+}
+
+/* Measure capped in ch rather than px: keeps the line length readable
+   instead of stretching across the full 1080px container on wide screens. */
+.hero-text {
+  max-width: 30ch;
+  margin: 0 auto;
+}
+
+/* Stacked title: small kicker, the glitched given name, then the surname.
+   Each part is its own block so the glitched word never wraps — its
+   ::before/::after copies are absolutely positioned over it and would
+   desync the moment the text broke across two lines. */
+.hero-text h1 {
+  margin: 22px 0 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-kicker {
+  font-size: clamp(15px, 1.7vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+.hero-glitch {
+  font-size: clamp(48px, 10vw, 132px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-surname {
+  font-size: clamp(20px, 3vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.hero-eyebrow {
+  color: var(--accent);
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  max-width: 40ch;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.hero-text .lead {
+  color: rgba(242, 237, 232, 0.78);
+  max-width: 52ch;
+  margin-inline: auto;
+  text-wrap: pretty;
+}
+
+.hero-intro .actions {
+  justify-content: center;
+  margin-top: 32px;
 }
 
 .hero-text h1 span {
@@ -269,30 +398,11 @@ main {
   display: inline-block;
   padding: 6px 12px;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(10, 10, 11, 0.35);
+  backdrop-filter: blur(6px);
+  color: var(--text);
   font-size: 13px;
-}
-
-.hero-card {
-  position: relative;
-  border-radius: var(--radius);
-  overflow: hidden;
-  aspect-ratio: 3 / 4;
-  max-height: 520px;
-}
-
-.hero-card .avatar {
-  width: 100%;
-  height: 100%;
-}
-
-.hero-card .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 28%;
-  display: block;
 }
 
 /* ── About ── */
@@ -654,16 +764,9 @@ h2 {
     padding: 0 20px 72px;
   }
 
-  .hero {
-    grid-template-columns: 1fr;
-    padding: 48px 0 56px;
-    gap: 32px;
-  }
-
-  .hero-card {
-    max-height: 380px;
-    aspect-ratio: auto;
-    height: 380px;
+  .hero-parallax {
+    height: 82svh;
+    min-height: 460px;
   }
 
   .about-section {
