@@ -148,6 +148,11 @@
 
   // ── Click interceptor ────────────────────────────────────────────────────────
   document.addEventListener('click', function (e) {
+    // Someone closer to the target already handled this click — the orbital
+    // cards do exactly that. Navigating anyway would yank the page away
+    // from under whatever they just opened.
+    if (e.defaultPrevented) return;
+
     // Ignore modified clicks (open in new tab, etc.)
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
 

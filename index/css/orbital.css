@@ -181,9 +181,18 @@
 .orbital.is-orbiting .orbital-node > a,
 .orbital.is-orbiting .orbital-node > span {
   display: block;
-  position: relative;
-  width: 0;
-  height: 0;
+  /* Alvo de 44px: o ponto sozinho tem 22px, abaixo do mínimo confortável
+     para clique e toque.
+
+     Posicionado por coordenadas, não por place-items: o nó é uma caixa 0x0
+     e a centralização de grid não colocou o link sobre o ponto — ele ficava
+     com o canto na órbita, deslocando ponto e rótulo em (22, 22). Com
+     top/left negativos o centro cai exatamente no ponto. */
+  position: absolute;
+  top: -22px;
+  left: -22px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   gap: 0;
   border: none;
@@ -194,8 +203,8 @@
 .orbital.is-orbiting .orbital-node > a::before,
 .orbital.is-orbiting .orbital-node > span::before {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   width: 22px;
   height: 22px;
   margin: -11px 0 0 -11px;
@@ -206,7 +215,7 @@
 
 .orbital-label {
   position: absolute;
-  top: 18px;
+  top: calc(50% + 14px);
   left: 50%;
   transform: translateX(-50%);
   width: 116px;
@@ -238,6 +247,126 @@
 
 .orbital-systems:hover ~ .orbital-hint {
   opacity: 0;
+}
+
+/* ── Card do nó ──────────────────────────────────────────────────────────
+   Abre abaixo do nó, que o JS acabou de girar até o topo — então o card
+   desce sobre o centro da órbita, como no template. Só existe no modo
+   órbita: na lista, o próprio link já é a navegação inteira. */
+.orbital-card {
+  position: absolute;
+  top: calc(50% + 30px);
+  left: 50%;
+  width: 246px;
+  padding: 16px 18px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(14, 14, 16, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  text-align: left;
+  cursor: default;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-10px) scale(0.96);
+  transition:
+    opacity 0.32s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.orbital-node.is-open .orbital-card {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Fiozinho ligando o card ao ponto, como no original */
+.orbital-card::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.orbital-card-status {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.orbital-card h3 {
+  margin: 11px 0 7px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.orbital-card p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.orbital-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #0c0c0d;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.orbital-card-btn::after {
+  content: "→";   /* seta → literal */
+  transition: transform 0.18s;
+}
+
+.orbital-card-btn:hover {
+  background: #ece8e3;
+}
+
+.orbital-card-btn:hover::after {
+  transform: translateX(3px);
+}
+
+/* Nó aberto: ponto maior e aceso, como o scale-150 do template */
+.orbital-node.is-open > a::before,
+.orbital-node.is-open > span::before {
+  transform: scale(1.5);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 22px rgba(221, 216, 208, 0.7);
+}
+
+.orbital-node.is-open > a,
+.orbital-node.is-open > span {
+  color: var(--accent);
+}
+
+/* Com um card aberto, o resto do sistema recua para não competir */
+.orbital.has-open .orbital-node:not(.is-open) {
+  filter: saturate(0.6);
+}
+
+.orbital.has-open::before {
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 /* ── Telas estreitas ──
