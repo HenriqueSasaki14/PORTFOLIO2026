@@ -23,19 +23,50 @@
     return doc;
   }
 
-  // ── CSS loader — resolves relative hrefs against the fetched page URL ────────
-  function ensureCss(attr, fromUrl) {
-    if (!attr) return;
-    const abs = new URL(attr, fromUrl.href).href;
-    const loaded = new Set(
-      [...document.querySelectorAll('link[rel="stylesheet"]')].map(l => l.href)
-    );
-    if (!loaded.has(abs)) {
+  // ── CSS sync ────────────────────────────────────────────────────────────────
+  // Each stylesheet carries its resolved URL in data-abs, recorded once, here,
+  // while the document base still matches the page it was authored for.
+  //
+  // Reading link.href instead would be wrong: that property re-resolves the
+  // relative attribute against the *current* URL, so once pushState moves us
+  // to /html/foo.html the original <link href="css/index.css"> starts
+  // reporting /html/css/index.css. Comparing against that never matches, and
+  // every navigation re-appends the same sheets.
+  function tagSheets() {
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(function (l) {
+      if (!l.dataset.abs) l.dataset.abs = l.href;
+    });
+  }
+  tagSheets();
+
+  // Make the live stylesheets match the page being shown: add what it needs,
+  // then drop what belonged only to the page we are leaving. Without the
+  // removal, styles from every page visited stay stacked and keep overriding
+  // whichever page is on screen.
+  function syncCss(doc, fromUrl) {
+    const wanted = new Set();
+    doc.querySelectorAll('link[rel="stylesheet"]').forEach(function (l) {
+      const attr = l.getAttribute('href');
+      if (attr) wanted.add(new URL(attr, fromUrl.href).href);
+    });
+    if (!wanted.size) return;
+
+    const current = [...document.querySelectorAll('link[rel="stylesheet"]')];
+    const have = new Set(current.map(l => l.dataset.abs));
+
+    // Add first, remove after — swapping the other way flashes unstyled.
+    wanted.forEach(function (abs) {
+      if (have.has(abs)) return;
       const link = document.createElement('link');
-      link.rel   = 'stylesheet';
-      link.href  = abs;
+      link.rel = 'stylesheet';
+      link.dataset.abs = abs;
+      link.href = abs;
       document.head.appendChild(link);
-    }
+    });
+
+    current.forEach(function (l) {
+      if (!wanted.has(l.dataset.abs)) l.remove();
+    });
   }
 
   // ── Apply fetched document to the live DOM ───────────────────────────────────
@@ -58,10 +89,8 @@
     const curFoot = document.querySelector('footer');
     if (newFoot && curFoot) curFoot.replaceWith(newFoot.cloneNode(true));
 
-    // Ensure any new CSS from the fetched page is loaded
-    doc.querySelectorAll('link[rel="stylesheet"]').forEach(function (l) {
-      ensureCss(l.getAttribute('href'), url);
-    });
+    // Match the live stylesheets to the page being shown
+    syncCss(doc, url);
 
     // Restore scroll position
     requestAnimationFrame(function () {

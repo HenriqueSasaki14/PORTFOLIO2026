@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../css/tecnico-desenvolvimento.css" />
   <link rel="stylesheet" href="../css/player.css" />
   <link rel="stylesheet" href="../css/animations.css" />
+  <link rel="stylesheet" href="../css/orbital.css" />
 </head>
 
 <body>
@@ -39,7 +40,7 @@
         </div>
       </div>
       <div class="lp-volume-wrap">
-        <span class="lp-vol-icon">🔊</span>
+        <span class="lp-vol-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
         <input type="range" id="lp-volume" min="0" max="100" value="50" aria-label="Volume">
       </div>
     </div>
@@ -59,34 +60,42 @@
     </section>
 
     <section class="section">
-      <div class="grid trimester-grid">
-        <article class="project school-card">
-          <div class="pill">1º trimestre</div>
-          <h3>1º trimestre</h3>
-          <p>Espaço reservado para os projetos e atividades técnicas do primeiro trimestre.</p>
-          <div class="links">
-            <a href="tecnico-desenvolvimento-1.html">Ver atividades</a>
-          </div>
-        </article>
+      <div class="orbital-systems">
+        <div class="orbital" data-orbital>
+          <h2 class="orbital-core">1º <small>trimestre</small></h2>
+          <ul class="orbital-nodes">
+            <li class="orbital-node" data-status="concluido">
+              <a href="tecnico-desenvolvimento-1.html">Grand Prix</a>
+            </li>
+            <li class="orbital-node" data-status="concluido">
+              <a href="tecnico-desenvolvimento-1.html"
+                 title="SA Modelagem de Sistemas">Modelagem de Sistemas</a>
+            </li>
+          </ul>
+        </div>
 
-        <article class="project school-card">
-          <div class="pill">2º trimestre</div>
-          <h3>2º trimestre</h3>
-          <p>Espaço reservado para os projetos e atividades técnicas do segundo trimestre.</p>
-          <div class="links">
-            <a>Ver atividades</a>
-          </div>
-        </article>
+        <div class="orbital" data-orbital>
+          <h2 class="orbital-core">2º <small>trimestre</small></h2>
+          <ul class="orbital-nodes">
+            <li class="orbital-node" data-status="andamento">
+              <a href="tecnico-desenvolvimento-2-programacao.html"
+                 title="Programação de Aplicativos e Desenvolvimento de Sistemas">Programação de Aplicativos</a>
+            </li>
+            <li class="orbital-node" data-status="andamento">
+              <a href="tecnico-desenvolvimento-2-iot.html">Internet das Coisas</a>
+            </li>
+          </ul>
+        </div>
 
-        <article class="project school-card">
-          <div class="pill">3º trimestre</div>
-          <h3>3º trimestre</h3>
-          <p>Espaço reservado para os projetos e atividades técnicas do terceiro trimestre.</p>
-          <div class="links">
-            <a>Ver atividades</a>
-          </div>
-        </article>
+        <div class="orbital" data-orbital>
+          <h2 class="orbital-core">3º <small>trimestre</small></h2>
+          <ul class="orbital-nodes">
+            <li class="orbital-node" data-status="pendente"><span>A definir</span></li>
+          </ul>
+        </div>
       </div>
+
+      <p class="orbital-hint">Passe o cursor para pausar as órbitas</p>
     </section>
   </main>
 
@@ -96,6 +105,10 @@
   <script src="../js/router.js"></script>
   <script src="../js/player.js"></script>
   <script src="../js/animations.js"></script>
+  <script src="../js/vendor/lenis.min.js"></script>
+  <script src="../js/smooth.js"></script>
+  <script src="../js/parallax.js"></script>
+  <script src="../js/orbital.js"></script>
 </body>
 
 </html>

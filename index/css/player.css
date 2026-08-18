@@ -137,10 +137,20 @@
 }
 
 .lp-vol-icon {
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
   color: var(--muted, #9aa6bf);
   flex-shrink: 0;
   line-height: 1;
+}
+
+/* SVG no lugar do emoji: monocromático, idêntico em todo sistema e herda a
+   cor daqui — coisas que 🔊 não fazia (cada SO desenha o seu, e emoji
+   colorido ignora `color`). */
+.lp-vol-icon svg {
+  width: 15px;
+  height: 15px;
+  display: block;
 }
 
 #lp-volume {

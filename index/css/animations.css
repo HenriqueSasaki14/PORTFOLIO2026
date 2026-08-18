@@ -65,7 +65,7 @@
   position: relative;
   display: block;
   color: var(--accent);
-  animation: glitch-tint 8s infinite step-end;
+  animation: glitch-tint 6s infinite step-end;
 }
 
 .hero-glitch::before,
@@ -79,12 +79,12 @@
 }
 
 .hero-glitch::before {
-  animation: glitch-a 8s infinite linear;
+  animation: glitch-a 6s infinite linear;
   z-index: 2;
 }
 
 .hero-glitch::after {
-  animation: glitch-b 8s infinite linear;
+  animation: glitch-b 6s infinite linear;
   z-index: 3;
 }
 
