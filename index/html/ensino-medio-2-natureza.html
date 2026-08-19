@@ -8,8 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="../Images/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/pages.css" />
@@ -35,12 +34,19 @@
         <span class="lp-artist" id="lp-artist"></span>
         <div class="lp-progress-row">
           <span class="lp-time" id="lp-current">0:00</span>
-          <div class="lp-progress" id="lp-progress"><div class="lp-bar" id="lp-bar"></div></div>
+          <div class="lp-progress" id="lp-progress">
+            <div class="lp-bar" id="lp-bar"></div>
+          </div>
           <span class="lp-time" id="lp-duration">0:00</span>
         </div>
       </div>
       <div class="lp-volume-wrap">
-        <span class="lp-vol-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
+        <span class="lp-vol-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5 6 9H3v6h3l5 4V5z" />
+            <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+            <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+          </svg></span>
         <input type="range" id="lp-volume" min="0" max="100" value="50" aria-label="Volume">
       </div>
     </div>
@@ -63,28 +69,36 @@
       <div class="grid activity-grid">
         <article class="activity-card" data-placeholder>
           <div class="activity-content">
-            <div class="pill">Tema da atividade</div>
-            <h3>Atividade 1</h3>
-            <p>Descreva aqui o que era o trabalho e o que você fez.</p>
-            <p>Habilidades: </p>
+            <div class="pill">Atividade 1</div>
+            <h3>Seminário Estequiométrico</h3>
+            <p>Nesta atividade, nós tínhamos de pesquisar e apresentar como a estequiometria é aplicada em diferentes
+              setores estratégicos da economia brasileira e mundial, explorando as relações entre reagentes e produtos,
+              rendimento das reações químicas, impactos ambientais, sustentabilidade, segurança energética e desafios
+              geopolíticos contemporâneos</p>
+            <p>Habilidades: C2 H7, H9 e H10</p>
             <div class="links">
-              <a href="#">Acessar atividade</a>
+              <a href="https://canva.link/qlq2dkfmu9srnc8">Acessar atividade</a>
             </div>
           </div>
+          <img class="activity-image" src="../Activity_images/natureza/Estequiometria.png" alt="Imagem da atividade"
+            loading="lazy" decoding="async" width="900" height="505">
         </article>
       </div>
 
       <div class="grid activity-grid">
         <article class="activity-card" data-placeholder>
           <div class="activity-content">
-            <div class="pill">Tema da atividade</div>
-            <h3>Atividade 2</h3>
-            <p>Descreva aqui o que era o trabalho e o que você fez.</p>
+            <div class="pill">Atividade 2</div>
+            <h3>Portfolio Eletroquímica</h3>
+            <p>Nesta atividade, criamos um site sobre a Eletroquímica e seus respectivos conceitos e, posteriormente,
+              adicionar um relatório da atividade prática do experimento que fizemos.</p>
             <p>Habilidades: </p>
             <div class="links">
-              <a href="#">Acessar atividade</a>
+              <a href="https://portfolio-eletroqu-mica.vercel.app/">Acessar atividade</a>
             </div>
           </div>
+          <img class="activity-image" src="../Activity_images/natureza/PortfolioEletroquimica.png" alt="Imagem da atividade" loading="lazy"
+            decoding="async" width="900" height="505">
         </article>
       </div>
 
@@ -99,42 +113,12 @@
               <a href="#">Acessar atividade</a>
             </div>
           </div>
+          <img class="activity-image" src="../Activity_images/natureza/" alt="Imagem da atividade" loading="lazy"
+            decoding="async" width="900" height="505">
         </article>
       </div>
 
-      <!-- ════════ COMO PREENCHER ════════
 
-           Cada bloco acima é uma atividade: um div.grid.activity-grid com
-           um article.activity-card dentro. O wrapper vai um por card, e é
-           isso que empilha as atividades uma embaixo da outra; se vários
-           articles dividirem o mesmo wrapper, eles viram colunas.
-
-           Troque o texto, aponte a imagem e o link, e apague o atributo
-           data-placeholder (ele só marca o que ainda não foi preenchido).
-           Sobrou card? Apague o div.grid inteiro, não só o article.
-           Faltou? Copie um div.grid completo e cole depois do último.
-
-           A imagem vai em  index/Activity_images/PASTA/  e o src usa
-           ../Activity_images/PASTA/arquivo.png
-
-           VARIANTES, é só copiar para dentro do article:
-
-           · Sem imagem: apague a linha do img.
-
-           · Mais de um link: repita o a dentro de div.links
-               <a href="URL1">Acessar atividade 1</a>
-               <a href="URL2">Acessar atividade 2</a>
-
-           · Com vídeo (como o Grand Prix do 1º trimestre): troque o img
-             por este bloco, dentro de div.activity-content
-               <div class="video-grid" aria-label="Vídeos da atividade">
-                 <video controls preload="metadata">
-                   <source src="../Activity_images/PASTA/video.mp4" type="video/mp4">
-                 </video>
-               </div>
-
-           · Quebra de linha no texto: use  <br><br>
-      ════════════════════════════════════ -->
     </section>
   </main>
 
