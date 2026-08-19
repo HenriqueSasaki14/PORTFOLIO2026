@@ -20,8 +20,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
+  <!-- Camada de fundo do hero: e' o maior elemento da primeira tela (LCP).
+       Vem de background-image no CSS, entao o browser so descobre que ela
+       existe depois de baixar e aplicar a folha — o preload antecipa isso. -->
+  <link rel="preload" as="image" href="Images/Eu-bg.webp" fetchpriority="high">
+  <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/index.css" />
   <link rel="stylesheet" href="css/player.css" />
   <link rel="stylesheet" href="css/animations.css" />
@@ -104,14 +109,14 @@
         <div class="card about-skills">
           <h3>Linguagens</h3>
           <ul class="tags">
-            <li>HTML5<img src="Images/Html.png" alt=""></li>
-            <li>CSS3 <img src="Images/Css.png" alt=""></li>
-            <li>JavaScript <img src="Images/Js.png" alt=""></li>
-            <li>Flutter <img src="Images/Flutter.png" alt=""></li>
-            <li>Git <img src="Images/Git.png" alt=""></li>
-            <li>Python básico <img src="Images/python.png" alt=""></li>
-            <li>C# intermediário<img src="Images/Csharp_Logo.png" alt=""></li>
-            <li>SQL básico<img src="Images/sql.png" alt=""></li>
+            <li>HTML5<img src="Images/Html.webp" alt="" loading="lazy" decoding="async" width="96" height="96"></li>
+            <li>CSS3 <img src="Images/Css.webp" alt="" loading="lazy" decoding="async" width="96" height="96"></li>
+            <li>JavaScript <img src="Images/Js.webp" alt="" loading="lazy" decoding="async" width="96" height="95"></li>
+            <li>Flutter <img src="Images/Flutter.webp" alt="" loading="lazy" decoding="async" width="96" height="96"></li>
+            <li>Git <img src="Images/Git.webp" alt="" loading="lazy" decoding="async" width="96" height="96"></li>
+            <li>Python básico <img src="Images/python.webp" alt="" loading="lazy" decoding="async" width="96" height="96"></li>
+            <li>C# intermediário<img src="Images/Csharp_Logo.webp" alt="" loading="lazy" decoding="async" width="96" height="96"></li>
+            <li>SQL básico<img src="Images/sql.webp" alt="" loading="lazy" decoding="async" width="96" height="45"></li>
           </ul>
           <h3>Cursos/Certificações/Competências</h3>
           <ul class="list">
@@ -125,7 +130,7 @@
         </div>
       </div>
       <figure class="about-photo">
-        <img src="Images/FotoVela.jpg" alt="Foto de Henrique Sasaki">
+        <img src="Images/FotoVela.webp" alt="Foto de Henrique Sasaki" loading="lazy" decoding="async" width="1100" height="733">
       </figure>
     </section>
 
@@ -137,17 +142,19 @@
           <div class="pill">SESI SENAI</div>
           <div class="category-title">
             <h3>Atividades e trabalhos escolares</h3>
-            <img class="category-image" src="Images/sesi.jpg" alt="Logo SESI SENAI">
+            <img class="category-image" src="Images/sesi.webp" alt="Logo SESI SENAI" loading="lazy" decoding="async" width="220" height="147">
           </div>
           <p>Espaço para organizar os projetos, tarefas e entregas feitas para a escola.</p>
           <span class="category-link">Acessar página</span>
         </a>
-        <a class="project category-card" href="projetos-pessoais.html">
+        <!-- Sem href enquanto a pagina nao existe: como <a> o card levava a
+             um 404. O card segue no lugar, anunciando o que vem. -->
+        <div class="project category-card is-soon" aria-disabled="true">
           <div class="pill">Pessoal</div>
           <h3>Projetos pessoais</h3>
           <p>Área reservada para projetos criados fora das atividades escolares.</p>
           <span class="category-link">Em breve</span>
-        </a>
+        </div>
       </div>
     </section>
 
@@ -156,13 +163,13 @@
       <h2>Outros portfólios</h2>
       <div class="category-grid">
         <a class="project category-card" href="https://canva.link/2y5s5yocv42tym0" target="_blank" rel="noreferrer">
-          <img class="card-cover" src="Images/portfolio-1.png" alt="Capa do portfólio 1">
+          <img class="card-cover" src="Images/portfolio-1.webp" alt="Capa do portfólio 1" loading="lazy" decoding="async" width="798" height="450">
           <h3>Portfólio 1° Ano</h3>
 
           <span class="category-link">Acessar →</span>
         </a>
         <a class="project category-card" href="https://sites.google.com/estudante.sesisenai.org.br/portfolio-2025/in%C3%ADcio" target="_blank" rel="noreferrer">
-          <img class="card-cover" src="Images/portfolio-2.png" alt="Capa do portfólio 2">
+          <img class="card-cover" src="Images/portfolio-2.webp" alt="Capa do portfólio 2" loading="lazy" decoding="async" width="800" height="329">
           <h3>Portfólio 2° Ano</h3>
           <span class="category-link">Acessar →</span>
         </a>

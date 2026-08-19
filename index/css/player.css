@@ -58,7 +58,7 @@
   color: var(--muted, #9aa6bf);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 .lp-progress {

@@ -1,0 +1,142 @@
+/* ── pages.css ────────────────────────────────────────────────────────────
+   Blocos das paginas internas: cabecalho de pagina, cards de secao
+   (escola / trimestre) e cards de atividade.
+
+   Carregado junto de base.css por escola, ensino-medio, tecnico e por
+   todas as paginas de materia. A home nao usa nada daqui, entao nao
+   carrega este arquivo.                                                  */
+
+/* ── Cabecalho de pagina ── */
+.page-hero {
+  max-width: 860px;
+  padding: 56px 0 32px;
+}
+
+.page-hero h1 {
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.page-title h1 {
+  margin: 0;
+}
+
+.page-title img {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  margin-left: 24px;
+}
+
+/* ── Cards de secao ── */
+.school-grid,
+.trimester-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.school-card {
+  min-height: 200px;
+  align-content: start;
+}
+
+.school-card .links,
+.school-card .subject-links {
+  margin-top: auto;
+}
+
+.subject-links {
+  display: grid;
+  gap: 6px;
+}
+
+.subject-links a {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 14px;
+  background: transparent;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.subject-links a:hover {
+  border-color: rgba(221, 216, 208, 0.3);
+  background: var(--accent-soft);
+}
+
+/* ── Cards de atividade ── */
+/* Um grid por card e' o que empilha as atividades uma abaixo da outra;
+   o respiro vai no grid para nao virar margem colapsavel no card. */
+.activity-grid {
+  padding-bottom: 10vh;
+}
+
+.activity-card {
+  min-height: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 20px;
+  align-items: center;
+}
+
+.activity-card .links {
+  margin-top: auto;
+}
+
+.activity-content {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-height: 100%;
+}
+
+.activity-image {
+  width: 280px;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  justify-self: end;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-title {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+
+  .page-title img {
+    width: 80px;
+    height: 80px;
+    margin-left: 0;
+  }
+
+  .activity-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .activity-image {
+    width: 100%;
+    justify-self: stretch;
+  }
+}

@@ -1,0 +1,28 @@
+# Cache-Control por tipo de arquivo.
+# Sem isto o Netlify serve tudo com must-revalidate: cada asset custa uma
+# ida ao servidor a cada visita, mesmo quando nada mudou. Com o cache
+# abaixo, a segunda visita e a navegacao entre paginas nao rebaixam nada.
+
+# Audio: os nomes vem da biblioteca de stock e nunca mudam.
+/audio/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Imagens: cache longo, mas nao immutable — atividades novas entram com
+# nome novo, e um arquivo trocado no lugar ainda se atualiza em 30 dias.
+/Images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/Activity_images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+# CSS e JS: revalida a cada hora. Sao pequenos e mudam junto com o HTML,
+# entao cache longo aqui deixaria a folha antiga sobre a marcacao nova.
+/css/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/js/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# HTML: sempre revalida. E' o arquivo que aponta para todos os outros.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

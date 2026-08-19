@@ -77,7 +77,12 @@
 
   // ── Audio element ────────────────────────────────────────────────────────────
   const audio = new Audio();
-  audio.preload = 'auto';
+  // 'metadata' baixa so o cabecalho da faixa — alguns KB, o suficiente para
+  // a duracao aparecer na barra. Antes isto era 'auto', o que puxava a faixa
+  // inteira (4-5 MB) em TODA carga de pagina, mesmo sem ninguem dar play, e
+  // ainda disputava banda com as imagens e o CSS. So sobe para 'auto' quando
+  // a musica de fato vai tocar (ver loadTrack e togglePlay).
+  audio.preload = 'metadata';
 
   // ── Runtime state ────────────────────────────────────────────────────────────
   const state = { index: 0, wasPlaying: false, resumeTime: 0, vol: 0.5 };
@@ -86,14 +91,18 @@
   function loadTrack(index, seek, autoplay) {
     state.index = index;
     const t = tracks[index];
+    audio.preload = autoplay ? 'auto' : 'metadata';
     audio.src = BASE + t.file;
     audio.volume = state.vol;
 
-    audio.addEventListener('canplay', function onCanPlay() {
-      audio.removeEventListener('canplay', onCanPlay);
-      if (seek > 0) audio.currentTime = seek;
+    // 'loadedmetadata', nao 'canplay': com preload='metadata' o browser para
+    // logo apos o cabecalho e nunca acumula buffer suficiente para tocar,
+    // entao 'canplay' nao dispara — e o seek e a UI ficariam presos.
+    audio.addEventListener('loadedmetadata', function onMeta() {
+      if (seek > 0 && seek < audio.duration) audio.currentTime = seek;
       if (autoplay) audio.play().catch(() => {});
       updateUI();
+      updateProgress();
     }, { once: true });
 
     audio.load();
@@ -142,6 +151,8 @@
   // ── Controls ─────────────────────────────────────────────────────────────────
   function togglePlay() {
     if (audio.paused) {
+      // A partir daqui a faixa inteira e' bem-vinda: o usuario pediu play.
+      audio.preload = 'auto';
       audio.play().catch(() => {});
     } else {
       audio.pause();

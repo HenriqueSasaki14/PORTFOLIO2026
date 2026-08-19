@@ -1,0 +1,27 @@
+/* Paginas de Linguagens: o card ainda usa a estrutura antiga, com pill,
+   h3, p e links como filhos diretos do .activity-card em vez de dentro de
+   um .activity-content. Sem estas regras a imagem entraria no fluxo e
+   empurraria o texto para baixo em vez de ficar na coluna da direita. */
+
+.activity-image {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+}
+
+.activity-card .pill,
+.activity-card h3,
+.activity-card p,
+.activity-card .links {
+  grid-column: 1;
+}
+
+@media (max-width: 640px) {
+  .activity-image,
+  .activity-card .pill,
+  .activity-card h3,
+  .activity-card p,
+  .activity-card .links {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
