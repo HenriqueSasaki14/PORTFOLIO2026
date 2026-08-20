@@ -73,11 +73,29 @@
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: var(--accent);
+  background: var(--node, var(--accent));
 }
 
-.orbital-node[data-status="andamento"] > a::before {
-  background: #e8b45a;
+/* ── Cor por trimestre ──────────────────────────────────────────────────
+   Com todos os status em "concluído", a cor não distingue mais nada se
+   vier do status — então ela passa a identificar o trimestre, que é a
+   informação que sobrou. Cada sistema define --node e os nós herdam.
+
+   Tons dessaturados de propósito: a paleta do site é off-white sobre
+   quase-preto, e cores saturadas brigariam com ela.                     */
+.orbital-systems > .orbital:nth-child(1) {
+  --node: var(--accent);
+  --node-glow: rgba(221, 216, 208, 0.55);
+}
+
+.orbital-systems > .orbital:nth-child(2) {
+  --node: #e8b45a;
+  --node-glow: rgba(232, 180, 90, 0.55);
+}
+
+.orbital-systems > .orbital:nth-child(3) {
+  --node: #8ab6c9;
+  --node-glow: rgba(138, 182, 201, 0.55);
 }
 
 /* Trimestres ainda sem conteúdo: presentes, porém apagados e sem link.
@@ -233,7 +251,8 @@
 .orbital.is-orbiting .orbital-node > a:hover::before,
 .orbital.is-orbiting .orbital-node > a:focus-visible::before {
   transform: scale(1.45);
-  box-shadow: 0 0 0 1px var(--accent), 0 0 20px rgba(221, 216, 208, 0.6);
+  box-shadow: 0 0 0 1px var(--node, var(--accent)),
+              0 0 20px var(--node-glow, rgba(221, 216, 208, 0.55));
 }
 
 /* Dica de uso — some assim que o ponteiro entra em algum sistema */
@@ -299,7 +318,7 @@
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--node, var(--accent));
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -352,7 +371,8 @@
 .orbital-node.is-open > a::before,
 .orbital-node.is-open > span::before {
   transform: scale(1.5);
-  box-shadow: 0 0 0 1px var(--accent), 0 0 22px rgba(221, 216, 208, 0.7);
+  box-shadow: 0 0 0 1px var(--node, var(--accent)),
+              0 0 22px var(--node-glow, rgba(221, 216, 208, 0.65));
 }
 
 .orbital-node.is-open > a,
